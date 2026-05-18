@@ -116,6 +116,31 @@
 		];
 
 		doc.table(10, 70, dépensesData, headers);
+
+		for (const dépense of dépenses) {
+			if (dépense.justificatif) {
+				doc.addPage({ orientation: "landscape" });
+
+				const fichier = dépense.justificatif.item(0);
+
+				const fichierBase64P = new Promise((resolve, reject) => {
+					const reader = new FileReader();
+					reader.addEventListener(
+						"load",
+						() => {
+							resolve(reader.result);
+						},
+						false,
+					);
+					reader.addEventListener("error", reject);
+					reader.readAsDataURL(fichier);
+				});
+
+				let fichierBase64 = await fichierBase64P;
+				doc.addImage(fichierBase64, "JPEG", 5, 5);
+			}
+		}
+
 		doc.save(`${nomEtPrénom} - NDF ${mois} ${année}.pdf`);
 	}
 </script>
