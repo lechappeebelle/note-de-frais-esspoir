@@ -230,7 +230,7 @@
 		padding: 1em;
 		max-width: 240px;
 		margin: 0 auto;
-		color: #111;
+		color: #341515;
 
 		@media (min-width: 640px) {
 			max-width: 80rem;
@@ -243,7 +243,7 @@
 
 		input,
 		select {
-			border: 1px solid #111;
+			border: 1px solid #341515;
 			border-radius: 1px;
 			padding: 0.2rem;
 			margin: 0 0.2rem;
@@ -276,12 +276,14 @@
 			font-size: 1.2rem;
 			padding: 0.7rem;
 			margin: 0.5rem 0;
-			border: 1px solid #111;
+			color: #341515;
+			border: 1px solid #341515;
 			border-radius: 1px;
+			background-color: rgb(255, 249, 215);
 
 			&[type="submit"] {
-				background-color: rgb(2, 84, 2);
-				color: #fff;
+				background-color: rgb(255, 215, 0);
+				color: #341515;
 				font-weight: bold;
 			}
 		}

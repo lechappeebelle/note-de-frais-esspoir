@@ -99,7 +99,7 @@
 <style lang="scss">
     input,
     select {
-        border: 1px solid #111;
+        border: 1px solid #341515;
         border-radius: 1px;
         padding: 0.2rem;
         margin: 0 0.2rem;
@@ -131,7 +131,7 @@
 
     fieldset {
         padding: 1rem;
-        border: 1px solid #111;
+        border: 1px solid #341515;
         border-radius: 1px;
         margin: 0.5rem 0;
 
