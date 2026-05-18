@@ -1,20 +1,5 @@
 <script>
-    /** @typedef Dépense
-     * @prop {string} jourDépense - le jour de la dépense
-     * @prop {string} moisDépense - le mois de la dépense
-     * @prop {string} annéeDépense - l'année de la dépense
-     * @prop {string} nomFournisseur - le nom du fournisseur
-     * @prop {string} natureDépense - la nature de la dépense
-     * @prop {string} motifDépense - le motif de la dépense
-     * @prop {string} montantHT - le montant HT
-     * @prop {string} montantTTC - le montant TTC
-     * @prop {string} commentaires - des commentaires à propos de la dépense
-     * @prop {FileList} justificatif - le justificatif de la dépense (plusieurs possibles ?)
-     */
-
-    /** @type {Dépense}*/
-    export let dépense;
-    export let index;
+    let { dépense, index } = $props();
 </script>
 
 <fieldset>
