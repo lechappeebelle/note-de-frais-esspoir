@@ -149,6 +149,23 @@
 
 		doc.save(`${nomEtPrénom} - NDF ${mois} ${année}.pdf`);
 	}
+
+	async function ajouterDépense(e) {
+		e.preventDefault();
+
+		dépenses.push({
+			jourDépense: " ",
+			moisDépense: leMoisDeMaintenant,
+			annéeDépense: lannéeDeMaintenant,
+			nomFournisseur: " ",
+			natureDépense: " ",
+			motifDépense: " ",
+			montantHT: "00.00",
+			montantTTC: "00.00",
+			commentaires: " ",
+			justificatifs: [],
+		});
+	}
 </script>
 
 <h1>L'Échappée Belle - Notes de frais</h1>
@@ -192,7 +209,6 @@
 		<input bind:value={année} type="number" min="2020" step="1" />
 	</label>
 	<h2>Dépenses ({dépenses.length})</h2>
-	<button on:click={ajouterDépense}>Ajouter une dépense</button>
 	{#each dépenses as dépense, index}
 		<DépenseFieldset
 			{dépense}
@@ -200,6 +216,7 @@
 			isOpen={index == dépenses.length - 1}
 		/>
 	{/each}
+	<button on:click={ajouterDépense}>Ajouter une dépense ➕</button>
 
 	<button type="submit">Créer le récap de notes de frais 🚀</button>
 </form>
@@ -240,6 +257,15 @@
 		button {
 			font-size: 1.2rem;
 			padding: 0.7rem;
+			margin: 0.5rem 0;
+			border: 1px solid #111;
+			border-radius: 1px;
+
+			&[type="submit"] {
+				background-color: rgb(2, 84, 2);
+				color: #fff;
+				font-weight: bold;
+			}
 		}
 	}
 </style>
