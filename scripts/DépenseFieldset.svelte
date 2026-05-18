@@ -8,7 +8,7 @@
             >{dépense.moisDépense}
             {dépense.annéeDépense} - {dépense.nomFournisseur}</summary
         >
-        <label>
+        <label class="date">
             <span>Date</span>
             <select bind:value={dépense.moisDépense}>
                 <option>janvier</option>
@@ -98,11 +98,24 @@
 </fieldset>
 
 <style lang="scss">
+    input,
+    select {
+        border: 1px solid #111;
+        border-radius: 1px;
+        padding: 0.2rem;
+        margin: 0 0.2rem;
+    }
+
     label {
         display: flex;
         flex-direction: column;
 
         margin-bottom: 0.7rem;
+        padding-right: 4rem;
+
+        &.date {
+            flex-direction: row;
+        }
 
         span {
             font-weight: bold;

@@ -229,6 +229,7 @@
 		padding: 1em;
 		max-width: 240px;
 		margin: 0 auto;
+		color: #111;
 
 		@media (min-width: 640px) {
 			max-width: 80rem;
@@ -238,6 +239,13 @@
 	form {
 		display: flex;
 		flex-direction: column;
+
+		input,
+		select {
+			border: 1px solid #111;
+			border-radius: 1px;
+			padding: 0.2rem;
+		}
 
 		label {
 			display: flex;
