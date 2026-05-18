@@ -95,13 +95,14 @@
 			} = dépense;
 
 			dépensesData.push({
-				"Date            ": `${moisDépense} ${annéeDépense}`,
-				"Nom du fournisseur": nomFournisseur,
-				Nature: natureDépense,
-				Motif: motifDépense,
-				"Montant HT ": montantHT,
-				"Montant TTC ": montantTTC,
-				"Commentaires ": commentaires,
+				"Date      ": `${moisDépense} ${annéeDépense}`,
+				"Nom du fournisseur":
+					doc.splitTextToSize(nomFournisseur, 25) || " ",
+				Nature: doc.splitTextToSize(natureDépense, 40) || " ",
+				Motif: doc.splitTextToSize(motifDépense, 40) || " ",
+				"Montant\nHT ": montantHT,
+				"Montant\nTTC ": montantTTC,
+				"Commentaires ": doc.splitTextToSize(commentaires, 40) || " ",
 			});
 		}
 
@@ -109,12 +110,12 @@
 		 * des objets des données, sinon jspdf jette une erreur.
 		 */
 		const headers = [
-			"Date            ",
+			"Date      ",
 			"Nom du fournisseur",
 			"Nature",
 			"Motif",
-			"Montant HT ",
-			"Montant TTC ",
+			"Montant\nHT ",
+			"Montant\nTTC ",
 			"Commentaires ",
 		];
 
