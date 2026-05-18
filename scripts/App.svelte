@@ -21,25 +21,31 @@
 	let année;
 
 	/** @type {Set<Dépense>} */
-	let dépenses = new Set([
-		{
-			jourDépense: "",
-			moisDépense: "",
-			annéeDépense: "",
-			nomFournisseur: "",
-			natureDépense: "",
-			motifDépense: "",
-			montantHT: "",
-			montantTTC: "",
-			commentaires: "",
-			justificatifs: [],
-		},
-	]);
+	let dépenses = new Set();
 
 	const maintenant = new Date();
+	const leMoisDeMaintenant = maintenant.toLocaleDateString("fr-FR", {
+		month: "long",
+	});
+	const lannéeDeMaintenant = maintenant.toLocaleDateString("fr-FR", {
+		year: "numeric",
+	});
 
-	mois = maintenant.toLocaleDateString("fr-FR", { month: "long" });
-	année = maintenant.toLocaleDateString("fr-FR", { year: "numeric" });
+	mois = leMoisDeMaintenant;
+	année = lannéeDeMaintenant;
+
+	dépenses.add({
+		jourDépense: "",
+		moisDépense: leMoisDeMaintenant,
+		annéeDépense: lannéeDeMaintenant,
+		nomFournisseur: "",
+		natureDépense: "",
+		motifDépense: "",
+		montantHT: "",
+		montantTTC: "",
+		commentaires: "",
+		justificatifs: [],
+	});
 
 	async function créerRécapNDF(e) {
 		e.preventDefault();
