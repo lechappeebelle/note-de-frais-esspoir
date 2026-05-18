@@ -1,55 +1,45 @@
 <script>
-	import { fillOdtTemplate } from "ods-xlsx";
-
-	/** @type {HTMLInputElement} */
-	let templateInput;
-
-	/** @type {FileList | undefined} */
-	let templateFiles;
-	$: template = templateFiles && templateFiles[0];
+	/** @typedef Dépense
+	 * @prop {string} jourDépense - le jour de la dépense
+	 * @prop {string} moisDépense - le mois de la dépense
+	 * @prop {string} annéeDépense - l'année de la dépense
+	 * @prop {string} nomFournisseur - le nom du fournisseur
+	 * @prop {string} natureDépense - la nature de la dépense
+	 * @prop {string} motifDépense - le motif de la dépense
+	 * @prop {string} montantHT - le montant HT
+	 * @prop {string} montantTTC - le montant TTC
+	 * @prop {string} commentaires - des commentaires à propos de la dépense
+	 * @prop {FileList} justificatif - le justificatif de la dépense (plusieurs possibles ?)
+	 */
 
 	let nomEtPrénom;
 	let responsableOpérationnel = ""; // à faire un jour
 	let fonctionLibellé;
 	let mois;
 	let année;
-	let nombreJoursFacturés;
-	let réalisations;
 
-	/** @type {FileList | undefined} */
-	let réalisationFiles;
-	$: réalisationFile = réalisationFiles && réalisationFiles[0];
-
-	let réalisationsString;
-	$: réalisationFile &&
-		réalisationFile.text().then((jsonString) => {
-			réalisationsString = jsonString;
-		});
-
-	$: réalisations =
-		typeof réalisationsString === "string" &&
-		JSON.parse(réalisationsString);
+	/** @type {Set<Dépense>} */
+	let dépenses = new Set([
+		{
+			jourDépense: "",
+			moisDépense: "",
+			annéeDépense: "",
+			nomFournisseur: "",
+			natureDépense: "",
+			motifDépense: "",
+			montantHT: "",
+			montantTTC: "",
+			commentaires: "",
+			justificatifs: [],
+		},
+	]);
 
 	const maintenant = new Date();
 
 	mois = maintenant.toLocaleDateString("fr-FR", { month: "long" });
 	année = maintenant.toLocaleDateString("fr-FR", { year: "numeric" });
 
-	const documentTypeURL = "./data/lbc-service-fait.odt";
-
-	// pré-charger le bon template
-	fetch(documentTypeURL)
-		.then((r) => r.blob())
-		.then((blob) => {
-			//console.log('blob', blob)
-			const file = new File([blob], "lbc-service-fait.odt");
-			let container = new DataTransfer();
-			container.items.add(file);
-			templateInput.files = container.files;
-			templateFiles = templateInput.files;
-		});
-
-	async function créerServiceFait(e) {
+	async function créerRécapNDF(e) {
 		e.preventDefault();
 
 		const data = {
@@ -58,26 +48,17 @@
 			fonctionLibellé,
 			mois,
 			année,
-			nombreJoursFacturés,
-			réalisations: réalisations || {
-				produit: [],
-				déploiement: [],
-				autre: [],
-			},
+			dépenses,
 		};
 
-		const templateAB = await template.arrayBuffer();
-
-		const serviceFaitOdtArrayBuffer = await fillOdtTemplate(
-			templateAB,
-			data,
-		);
+		/** @type {ArrayBuffer}*/
+		let ndfArrayBuffer; // comment on fait un pdf ?
 
 		télécharger(
-			new Blob([serviceFaitOdtArrayBuffer], {
-				type: "application/vnd.oasis.opendocument.text",
+			new Blob([ndfArrayBuffer], {
+				type: "application/application/pdf",
 			}),
-			`service-fait-${mois}-${année}.odt`,
+			`${nomEtPrénom} - NDF ${mois} ${année}.pdf`,
 		);
 	}
 
@@ -93,7 +74,7 @@
 
 <h1>L'Échappée Belle - Notes de frais</h1>
 
-<form on:submit={créerServiceFait}>
+<form on:submit={créerRécapNDF}>
 	<label>
 		<span>Nom et prénom de la personne réalisant la NDF</span>
 		<input
@@ -114,6 +95,7 @@
 	</label>
 	<label>
 		<span>Période de la NDF</span>
+		<!-- Faire un composant de date -->
 		<select bind:value={mois}>
 			<option>janvier</option>
 			<option>février</option>
@@ -130,10 +112,99 @@
 		</select>
 		<input bind:value={année} type="number" min="2020" step="1" />
 	</label>
-	<fieldset>
-		<legend>Dépenses</legend>
-		TODO : Tableau ou liste de card avec les infos pour chaque dépense.
-	</fieldset>
+	<h2>Dépenses</h2>
+	{#each dépenses as dépense, index}
+		<fieldset>
+			<legend>Dépense {index + 1}</legend>
+
+			<label>
+				<span>Date</span>
+				<select bind:value={dépense.moisDépense}>
+					<option>janvier</option>
+					<option>février</option>
+					<option>mars</option>
+					<option>avril</option>
+					<option>mai</option>
+					<option>juin</option>
+					<option>juillet</option>
+					<option>août</option>
+					<option>septembre</option>
+					<option>octobre</option>
+					<option>novembre</option>
+					<option>décembre</option>
+				</select>
+				<input
+					bind:value={dépense.annéeDépense}
+					type="number"
+					min="2020"
+					step="1"
+				/>
+			</label>
+			<label>
+				<span>Nom du fournisseur</span>
+				<input
+					bind:value={dépense.nomFournisseur}
+					type="text"
+					autocomplete="on"
+					name="dépense{index + 1}NomFournisseur"
+				/>
+			</label>
+			<label>
+				<span>Nature de la dépense</span>
+				<input
+					bind:value={dépense.natureDépense}
+					type="text"
+					autocomplete="on"
+					name="dépense{index + 1}NatureDépense"
+				/>
+			</label>
+			<label>
+				<span>Motif de la dépense</span>
+				<input
+					bind:value={dépense.motifDépense}
+					type="text"
+					autocomplete="on"
+					name="dépense{index + 1}MotifDépense"
+				/>
+			</label>
+			<label>
+				<span>Montant HT de la dépense</span>
+				<input
+					bind:value={dépense.montantHT}
+					type="text"
+					autocomplete="on"
+					name="dépense{index + 1}MontantHT"
+				/>
+			</label>
+			<label>
+				<span>Montant TTC de la dépense</span>
+				<input
+					bind:value={dépense.montantTTC}
+					type="text"
+					autocomplete="on"
+					name="dépense{index + 1}MontantTTC"
+				/>
+			</label>
+			<label>
+				<span>Commentaires</span>
+				<input
+					bind:value={dépense.commentaires}
+					type="text"
+					autocomplete="on"
+					name="dépense{index + 1}commentaires"
+				/>
+			</label>
+			<label>
+				<span>Justificatif</span>
+				<input
+					bind:files={dépense.justificatif}
+					accept=".jpg, .jpeg, .png, .pdf, .gif"
+					type="file"
+					name="dépense{index + 1}Justificatif"
+				/>
+			</label>
+		</fieldset>
+	{/each}
 
 	<button type="submit">Créer le récap de notes de frais 🚀</button>
 </form>
