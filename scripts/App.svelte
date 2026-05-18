@@ -51,9 +51,10 @@
 		e.preventDefault();
 
 		const doc = new jsPDF();
+		doc.setFontSize(18);
+		doc.text("L'Échappée Belle - Notes de frais", 10, 20);
 
 		// Premier tableau avec les informations sur la personne et la période
-		doc.text("Coucou l'Échappée Belle", 10, 10);
 
 		doc.setFontSize(10);
 		doc.cell(
