@@ -115,6 +115,10 @@
 
         &.date {
             flex-direction: row;
+
+            span {
+                flex-grow: 1;
+            }
         }
 
         span {

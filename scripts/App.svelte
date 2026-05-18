@@ -189,7 +189,7 @@
 			name="fonctionLibellé"
 		/>
 	</label>
-	<label>
+	<label class="date">
 		<span>Période de la NDF</span>
 		<!-- Faire un composant de date -->
 		<select bind:value={mois}>
@@ -245,6 +245,7 @@
 			border: 1px solid #111;
 			border-radius: 1px;
 			padding: 0.2rem;
+			margin: 0 0.2rem;
 		}
 
 		label {
@@ -252,6 +253,14 @@
 			flex-direction: column;
 
 			margin-bottom: 0.7rem;
+
+			&.date {
+				flex-direction: row;
+
+				span {
+					flex-grow: 1;
+				}
+			}
 
 			span {
 				font-weight: bold;
