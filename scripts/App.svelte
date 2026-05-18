@@ -35,51 +35,87 @@
 	année = lannéeDeMaintenant;
 
 	dépenses.add({
-		jourDépense: "",
+		jourDépense: " ",
 		moisDépense: leMoisDeMaintenant,
 		annéeDépense: lannéeDeMaintenant,
-		nomFournisseur: "",
-		natureDépense: "",
-		motifDépense: "",
-		montantHT: "",
-		montantTTC: "",
-		commentaires: "",
+		nomFournisseur: " ",
+		natureDépense: " ",
+		motifDépense: " ",
+		montantHT: " ",
+		montantTTC: " ",
+		commentaires: " ",
 		justificatifs: [],
 	});
 
 	async function créerRécapNDF(e) {
 		e.preventDefault();
 
-		const doc = new jsPDF();
+		const doc = new jsPDF({ orientation: "landscape" });
 		doc.setFontSize(18);
 		doc.text("L'Échappée Belle - Notes de frais", 10, 20);
+		doc.setFontSize(10);
 
 		// Premier tableau avec les informations sur la personne et la période
-
-		doc.setFontSize(10);
 		doc.cell(
 			10,
-			20,
+			30,
 			90,
 			10,
 			"Nom & Prénom de la personne réalisant la NDF",
 			1,
 			"left",
 		);
-		doc.cell(10, 20, 100, 10, nomEtPrénom, 1, "left");
+		doc.cell(10, 30, 100, 10, nomEtPrénom, 1, "left");
 		doc.cell(
 			10,
-			20,
+			30,
 			90,
 			10,
 			"Fonction de la personne réalisant la NDF",
 			2,
 			"left",
 		);
-		doc.cell(10, 20, 100, 10, fonctionLibellé, 2, "left");
-		doc.cell(10, 20, 90, 10, "Période de la NDF", 3, "left");
-		doc.cell(10, 20, 100, 10, `${mois} ${année}`, 3, "left");
+		doc.cell(10, 30, 100, 10, fonctionLibellé, 2, "left");
+		doc.cell(10, 30, 90, 10, "Période de la NDF", 3, "left");
+		doc.cell(10, 30, 100, 10, `${mois} ${année}`, 3, "left");
 
+		// Deuxième tableau avec les dépenses
+		let dépensesData = [];
+		for (const dépense of dépenses) {
+			const {
+				moisDépense,
+				annéeDépense,
+				nomFournisseur,
+				natureDépense,
+				motifDépense,
+				montantHT,
+				montantTTC,
+				commentaires,
+				justificatif,
+			} = dépense;
+
+			dépensesData.push({
+				Date: `${moisDépense} ${annéeDépense}`,
+				"Nom du fournisseur": nomFournisseur,
+				"Nature de la dépense": natureDépense,
+				"Motif de la dépense": motifDépense,
+				"Montant HT": montantHT,
+				"Montant TTC": montantTTC,
+				Commentaires: commentaires,
+			});
+		}
+
+		const headers = [
+			"Date",
+			"Nom du fournisseur",
+			"Nature de la dépense",
+			"Motif de la dépense",
+			"Montant HT",
+			"Montant TTC",
+			"Commentaires",
+		];
+
+		doc.table(10, 70, dépensesData, headers);
 		doc.save(`${nomEtPrénom} - NDF ${mois} ${année}.pdf`);
 	}
 </script>
