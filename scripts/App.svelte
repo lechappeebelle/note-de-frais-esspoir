@@ -15,9 +15,9 @@
 	 * @prop {FileList} justificatif - le justificatif de la dépense (plusieurs possibles ?)
 	 */
 
-	let nomEtPrénom = $state(" ");
+	let nomEtPrénom = $state("");
 	let responsableOpérationnel = $state(""); // à faire un jour
-	let fonctionLibellé = $state(" ");
+	let fonctionLibellé = $state("");
 	let mois = $state("");
 	let année = $state("");
 
@@ -36,15 +36,15 @@
 	année = lannéeDeMaintenant;
 
 	dépenses.push({
-		jourDépense: " ",
+		jourDépense: "",
 		moisDépense: leMoisDeMaintenant,
 		annéeDépense: lannéeDeMaintenant,
-		nomFournisseur: " ",
-		natureDépense: " ",
-		motifDépense: " ",
+		nomFournisseur: "",
+		natureDépense: "",
+		motifDépense: "",
 		montantHT: "00.00",
 		montantTTC: "00.00",
-		commentaires: " ",
+		commentaires: "",
 		justificatifs: [],
 	});
 
@@ -66,7 +66,7 @@
 			1,
 			"left",
 		);
-		doc.cell(10, 30, 150, 10, nomEtPrénom, 1, "left");
+		doc.cell(10, 30, 150, 10, nomEtPrénom || " ", 1, "left");
 		doc.cell(
 			10,
 			30,
@@ -76,7 +76,7 @@
 			2,
 			"left",
 		);
-		doc.cell(10, 30, 150, 10, fonctionLibellé, 2, "left");
+		doc.cell(10, 30, 150, 10, fonctionLibellé || " ", 2, "left");
 		doc.cell(10, 30, 110, 10, "Période de la NDF", 3, "left");
 		doc.cell(10, 30, 150, 10, `${mois} ${année}`, 3, "left");
 
@@ -95,13 +95,13 @@
 			} = dépense;
 
 			dépensesData.push({
-				Date: `${moisDépense} ${annéeDépense}`,
+				"Date            ": `${moisDépense} ${annéeDépense}`,
 				"Nom du fournisseur": nomFournisseur,
 				Nature: natureDépense,
 				Motif: motifDépense,
-				"Montant HT": montantHT,
-				"Montant TTC": montantTTC,
-				Commentaires: commentaires,
+				"Montant HT ": montantHT,
+				"Montant TTC ": montantTTC,
+				"Commentaires ": commentaires,
 			});
 		}
 
@@ -109,18 +109,18 @@
 		 * des objets des données, sinon jspdf jette une erreur.
 		 */
 		const headers = [
-			"Date",
+			"Date            ",
 			"Nom du fournisseur",
 			"Nature",
 			"Motif",
-			"Montant HT",
-			"Montant TTC",
-			"Commentaires",
+			"Montant HT ",
+			"Montant TTC ",
+			"Commentaires ",
 		];
 
 		doc.table(10, 70, dépensesData, headers, {
-			autoSize: true,
 			fontSize: 12,
+			printHeaders: true,
 		});
 
 		for (const dépense of dépenses) {
@@ -162,7 +162,7 @@
 			motifDépense: " ",
 			montantHT: "00.00",
 			montantTTC: "00.00",
-			commentaires: " ",
+			commentaires: "\n\n",
 			justificatifs: [],
 		});
 	}

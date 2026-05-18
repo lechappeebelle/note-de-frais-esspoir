@@ -1,16 +1,28 @@
 <script>
     let { dépense, index, isOpen = false } = $props();
+    let {
+        jourDépense,
+        moisDépense,
+        annéeDépense,
+        nomFournisseur,
+        natureDépense,
+        motifDépense,
+        montantHT,
+        montantTTC,
+        commentaires,
+        justificatif,
+    } = dépense;
 </script>
 
 <fieldset>
     <details bind:open={isOpen}>
         <summary
-            >{dépense.moisDépense}
-            {dépense.annéeDépense} - {dépense.nomFournisseur}</summary
+            >{moisDépense}
+            {annéeDépense} - {nomFournisseur}</summary
         >
         <label class="date">
             <span>Date</span>
-            <select bind:value={dépense.moisDépense}>
+            <select bind:value={moisDépense}>
                 <option>janvier</option>
                 <option>février</option>
                 <option>mars</option>
@@ -25,7 +37,7 @@
                 <option>décembre</option>
             </select>
             <input
-                bind:value={dépense.annéeDépense}
+                bind:value={annéeDépense}
                 type="number"
                 min="2020"
                 step="1"
@@ -34,7 +46,7 @@
         <label>
             <span>Nom du fournisseur</span>
             <input
-                bind:value={dépense.nomFournisseur}
+                bind:value={nomFournisseur}
                 type="text"
                 autocomplete="on"
                 name="dépense{index + 1}NomFournisseur"
@@ -43,7 +55,7 @@
         <label>
             <span>Nature de la dépense</span>
             <input
-                bind:value={dépense.natureDépense}
+                bind:value={natureDépense}
                 type="text"
                 autocomplete="on"
                 name="dépense{index + 1}NatureDépense"
@@ -52,7 +64,7 @@
         <label>
             <span>Motif de la dépense</span>
             <input
-                bind:value={dépense.motifDépense}
+                bind:value={motifDépense}
                 type="text"
                 autocomplete="on"
                 name="dépense{index + 1}MotifDépense"
@@ -61,7 +73,7 @@
         <label>
             <span>Montant HT de la dépense</span>
             <input
-                bind:value={dépense.montantHT}
+                bind:value={montantHT}
                 type="text"
                 autocomplete="on"
                 name="dépense{index + 1}MontantHT"
@@ -70,7 +82,7 @@
         <label>
             <span>Montant TTC de la dépense</span>
             <input
-                bind:value={dépense.montantTTC}
+                bind:value={montantTTC}
                 type="text"
                 autocomplete="on"
                 name="dépense{index + 1}MontantTTC"
@@ -78,17 +90,16 @@
         </label>
         <label>
             <span>Commentaires</span>
-            <input
-                bind:value={dépense.commentaires}
+            <textarea
+                bind:value={commentaires}
                 type="text"
-                autocomplete="on"
                 name="dépense{index + 1}commentaires"
             />
         </label>
         <label>
             <span>Justificatif</span>
             <input
-                bind:files={dépense.justificatif}
+                bind:files={justificatif}
                 accept=".jpg, .jpeg, .png, .pdf, .gif"
                 type="file"
                 name="dépense{index + 1}Justificatif"
