@@ -1,4 +1,6 @@
 <script>
+	import { jsPDF } from "jspdf";
+
 	/** @typedef Dépense
 	 * @prop {string} jourDépense - le jour de la dépense
 	 * @prop {string} moisDépense - le mois de la dépense
@@ -42,33 +44,36 @@
 	async function créerRécapNDF(e) {
 		e.preventDefault();
 
-		const data = {
-			nomEtPrénom,
-			responsableOpérationnel, // à faire un jour
-			fonctionLibellé,
-			mois,
-			année,
-			dépenses,
-		};
+		const doc = new jsPDF();
 
-		/** @type {ArrayBuffer}*/
-		let ndfArrayBuffer; // comment on fait un pdf ?
+		// Premier tableau avec les informations sur la personne et la période
+		doc.text("Coucou l'Échappée Belle", 10, 10);
 
-		télécharger(
-			new Blob([ndfArrayBuffer], {
-				type: "application/application/pdf",
-			}),
-			`${nomEtPrénom} - NDF ${mois} ${année}.pdf`,
+		doc.setFontSize(10);
+		doc.cell(
+			10,
+			20,
+			90,
+			10,
+			"Nom & Prénom de la personne réalisant la NDF",
+			1,
+			"left",
 		);
-	}
+		doc.cell(10, 20, 100, 10, nomEtPrénom, 1, "left");
+		doc.cell(
+			10,
+			20,
+			90,
+			10,
+			"Fonction de la personne réalisant la NDF",
+			2,
+			"left",
+		);
+		doc.cell(10, 20, 100, 10, fonctionLibellé, 2, "left");
+		doc.cell(10, 20, 90, 10, "Période de la NDF", 3, "left");
+		doc.cell(10, 20, 100, 10, `${mois} ${année}`, 3, "left");
 
-	async function télécharger(blob, nomFichier) {
-		const link = document.createElement("a");
-		link.download = nomFichier;
-		link.href = URL.createObjectURL(blob);
-		document.body.appendChild(link);
-		link.click();
-		document.body.removeChild(link);
+		doc.save(`${nomEtPrénom} - NDF ${mois} ${année}.pdf`);
 	}
 </script>
 

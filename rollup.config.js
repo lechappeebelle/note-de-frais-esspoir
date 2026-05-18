@@ -13,7 +13,8 @@ export default {
 	output: {
 		sourcemap: true,
 		format: 'es',
-		file: 'build/bundle.js'
+		file: 'build/bundle.js',
+		inlineDynamicImports: true,
 	},
 	plugins: [
 		svelte({
