@@ -53,31 +53,31 @@
 		const doc = new jsPDF({ orientation: "landscape" });
 		doc.setFontSize(18);
 		doc.text("L'Échappée Belle - Notes de frais", 10, 20);
-		doc.setFontSize(10);
+		doc.setFontSize(12);
 
 		// Premier tableau avec les informations sur la personne et la période
 		doc.cell(
 			10,
 			30,
-			90,
+			110,
 			10,
 			"Nom & Prénom de la personne réalisant la NDF",
 			1,
 			"left",
 		);
-		doc.cell(10, 30, 100, 10, nomEtPrénom, 1, "left");
+		doc.cell(10, 30, 150, 10, nomEtPrénom, 1, "left");
 		doc.cell(
 			10,
 			30,
-			90,
+			110,
 			10,
 			"Fonction de la personne réalisant la NDF",
 			2,
 			"left",
 		);
-		doc.cell(10, 30, 100, 10, fonctionLibellé, 2, "left");
-		doc.cell(10, 30, 90, 10, "Période de la NDF", 3, "left");
-		doc.cell(10, 30, 100, 10, `${mois} ${année}`, 3, "left");
+		doc.cell(10, 30, 150, 10, fonctionLibellé, 2, "left");
+		doc.cell(10, 30, 110, 10, "Période de la NDF", 3, "left");
+		doc.cell(10, 30, 150, 10, `${mois} ${année}`, 3, "left");
 
 		// Deuxième tableau avec les dépenses
 		let dépensesData = [];
@@ -91,31 +91,36 @@
 				montantHT,
 				montantTTC,
 				commentaires,
-				justificatif,
 			} = dépense;
 
 			dépensesData.push({
 				Date: `${moisDépense} ${annéeDépense}`,
 				"Nom du fournisseur": nomFournisseur,
-				"Nature de la dépense": natureDépense,
-				"Motif de la dépense": motifDépense,
+				Nature: natureDépense,
+				Motif: motifDépense,
 				"Montant HT": montantHT,
 				"Montant TTC": montantTTC,
 				Commentaires: commentaires,
 			});
 		}
 
+		/* On doit mettre exactement les mêmes libellés de headers que les clés
+		* des objets des données, sinon jspdf jette une erreur.	
+		 */
 		const headers = [
 			"Date",
 			"Nom du fournisseur",
-			"Nature de la dépense",
-			"Motif de la dépense",
+			"Nature",
+			"Motif",
 			"Montant HT",
 			"Montant TTC",
 			"Commentaires",
 		];
 
-		doc.table(10, 70, dépensesData, headers);
+		doc.table(10, 70, dépensesData, headers, {
+			autoSize: true,
+			fontSize: 12,
+		});
 
 		for (const dépense of dépenses) {
 			if (dépense.justificatif) {
