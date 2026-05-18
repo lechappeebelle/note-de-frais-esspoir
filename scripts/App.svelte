@@ -15,14 +15,14 @@
 	 * @prop {FileList} justificatif - le justificatif de la dépense (plusieurs possibles ?)
 	 */
 
-	let nomEtPrénom;
-	let responsableOpérationnel = ""; // à faire un jour
-	let fonctionLibellé;
-	let mois;
-	let année;
+	let nomEtPrénom = $state(" ");
+	let responsableOpérationnel = $state(""); // à faire un jour
+	let fonctionLibellé = $state(" ");
+	let mois = $state("");
+	let année = $state("");
 
-	/** @type {Set<Dépense>} */
-	let dépenses = new Set();
+	/** @type {Dépense[]} */
+	let dépenses = $state([]);
 
 	const maintenant = new Date();
 	const leMoisDeMaintenant = maintenant.toLocaleDateString("fr-FR", {
@@ -35,7 +35,7 @@
 	mois = leMoisDeMaintenant;
 	année = lannéeDeMaintenant;
 
-	dépenses.add({
+	dépenses.push({
 		jourDépense: " ",
 		moisDépense: leMoisDeMaintenant,
 		annéeDépense: lannéeDeMaintenant,
@@ -191,10 +191,14 @@
 		</select>
 		<input bind:value={année} type="number" min="2020" step="1" />
 	</label>
-	<h2>Dépenses ({dépenses.size})</h2>
+	<h2>Dépenses ({dépenses.length})</h2>
 	<button on:click={ajouterDépense}>Ajouter une dépense</button>
 	{#each dépenses as dépense, index}
-		<DépenseFieldset {dépense} {index} />
+		<DépenseFieldset
+			{dépense}
+			{index}
+			isOpen={index == dépenses.length - 1}
+		/>
 	{/each}
 
 	<button type="submit">Créer le récap de notes de frais 🚀</button>

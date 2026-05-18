@@ -1,9 +1,9 @@
 <script>
-    let { dépense, index } = $props();
+    let { dépense, index, isOpen = false } = $props();
 </script>
 
 <fieldset>
-    <details open>
+    <details bind:open={isOpen}>
         <summary
             >{dépense.moisDépense}
             {dépense.annéeDépense} - {dépense.nomFournisseur}</summary
@@ -117,7 +117,7 @@
         padding: 1rem;
         border: 1px solid #111;
         border-radius: 1px;
-        margin: 1rem 0;
+        margin: 0.5rem 0;
 
         details {
             &[open] > summary::after {
