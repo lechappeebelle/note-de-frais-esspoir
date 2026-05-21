@@ -171,7 +171,7 @@
 
 <h1>L'Échappée Belle - Notes de frais</h1>
 
-<form on:submit={créerRécapNDF}>
+<form onsubmit={créerRécapNDF}>
 	<label>
 		<span>Nom et prénom de la personne réalisant la NDF</span>
 		<input
@@ -217,7 +217,7 @@
 			isOpen={index == dépenses.length - 1}
 		/>
 	{/each}
-	<button on:click={ajouterDépense}>Ajouter une dépense ➕</button>
+	<button onclick={ajouterDépense}>Ajouter une dépense ➕</button>
 
 	<button type="submit">Créer le récap de notes de frais 🚀</button>
 </form>
