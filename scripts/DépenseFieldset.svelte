@@ -83,7 +83,7 @@
                 name="dépense{index + 1}MotifDépense"
             />
         </label>
-        <label>
+        <label class="montant">
             <span>Montant HT de la dépense</span>
             <input
                 bind:value={dépense.montantHT}
@@ -94,7 +94,7 @@
                 name="dépense{index + 1}MontantHT"
             />
         </label>
-        <label>
+        <label class="montant">
             <span>Montant TTC de la dépense</span>
             <input
                 bind:value={dépense.montantTTC}
@@ -149,6 +149,23 @@
 
         &:last-of-type {
             margin-bottom: 2rem;
+        }
+
+        &.montant {
+            position: relative;
+        }
+
+        &.montant::after {
+            content: "€";
+            font-size: 18px;
+            color: #a99c9c;
+            position: absolute;
+            bottom: 3px;
+            right: 2rem;
+
+            @media (min-width: 1024px) {
+                right: 6rem;
+            }
         }
     }
 
