@@ -47,34 +47,40 @@
 	async function créerRécapNDF(e) {
 		e.preventDefault();
 
-		const doc = new jsPDF({ orientation: "landscape" });
+		const doc = new jsPDF({
+			orientation: "landscape",
+			unit: "px",
+			hotfixes: "px_scaling",
+		});
 		doc.setFontSize(18);
-		doc.text("L'Échappée Belle - Notes de frais", 10, 20);
-		doc.setFontSize(12);
+		doc.text("L'Échappée Belle - Notes de frais", 20, 30);
+		doc.setFontSize(13);
+		const docWidth = doc.internal.pageSize.getWidth();
+		const docHeight = doc.internal.pageSize.getHeight();
 
 		// Premier tableau avec les informations sur la personne et la période
 		doc.cell(
-			10,
-			30,
-			110,
-			10,
+			20,
+			60,
+			250,
+			18,
 			"Nom & Prénom de la personne réalisant la NDF",
 			1,
 			"left",
 		);
-		doc.cell(10, 30, 150, 10, nomEtPrénom || " ", 1, "left");
+		doc.cell(20, 60, 300, 18, nomEtPrénom || " ", 1, "left");
 		doc.cell(
-			10,
-			30,
-			110,
-			10,
+			20,
+			60,
+			250,
+			18,
 			"Fonction de la personne réalisant la NDF",
 			2,
 			"left",
 		);
-		doc.cell(10, 30, 150, 10, fonctionLibellé || " ", 2, "left");
-		doc.cell(10, 30, 110, 10, "Période de la NDF", 3, "left");
-		doc.cell(10, 30, 150, 10, `${mois} ${année}`, 3, "left");
+		doc.cell(20, 60, 300, 18, fonctionLibellé || " ", 2, "left");
+		doc.cell(20, 60, 250, 18, "Période de la NDF", 3, "left");
+		doc.cell(20, 60, 300, 18, `${mois} ${année}`, 3, "left");
 
 		// Deuxième tableau avec les dépenses
 		let dépensesData = [];
@@ -96,12 +102,12 @@
 					year: "numeric",
 				}),
 				"Nom du fournisseur":
-					doc.splitTextToSize(nomFournisseur, 25) || " ",
-				Nature: doc.splitTextToSize(natureDépense, 40) || " ",
-				Motif: doc.splitTextToSize(motifDépense, 40) || " ",
+					doc.splitTextToSize(nomFournisseur, 70) || " ",
+				Nature: doc.splitTextToSize(natureDépense, 100) || " ",
+				Motif: doc.splitTextToSize(motifDépense, 100) || " ",
 				"Montant\nHT ": montantHT,
 				"Montant\nTTC ": montantTTC,
-				"Commentaires ": doc.splitTextToSize(commentaires, 40) || " ",
+				"Commentaires ": doc.splitTextToSize(commentaires, 100) || " ",
 			});
 		}
 
@@ -118,8 +124,8 @@
 			"Commentaires ",
 		];
 
-		doc.table(10, 70, dépensesData, headers, {
-			fontSize: 12,
+		doc.table(20, 150, dépensesData, headers, {
+			fontSize: 13,
 			printHeaders: true,
 		});
 
@@ -142,8 +148,55 @@
 					reader.readAsDataURL(fichier);
 				});
 
-				let fichierBase64 = await fichierBase64P;
-				doc.addImage(fichierBase64, "JPEG", 5, 5);
+				const fichierBase64 = await fichierBase64P;
+				const fichierDimensionsP = new Promise((resolve, reject) => {
+					const img = new Image();
+					const objectURL = URL.createObjectURL(fichier);
+
+					img.onload = () => {
+						resolve({ width: img.width, height: img.height });
+						URL.revokeObjectURL(objectURL);
+					};
+
+					img.onerror = () => {
+						reject(new Error("Impossible de charger l'image"));
+						URL.revokeObjectURL(objectURL);
+					};
+
+					img.src = objectURL;
+				});
+
+				/**
+				 * jspdf ne gère pas le resizing, on va faire un resize
+				 * manuellement en partant du principe que :
+				 *   - la largeur max d'une image est celle d'une page A4,
+				 *     moins 20px de marge
+				 *   - la hauteur max d'une image est celle d'une page A4,
+				 *     moins 20 px de marge
+				 */
+				const fichierDimensions = await fichierDimensionsP;
+				const { width: fichierWidth, height: fichierHeight } =
+					fichierDimensions;
+				let imgWidth = docWidth - 20;
+				let imgHeight = docHeight - 20;
+				let ratio;
+
+				if (fichierWidth > fichierHeight) {
+					ratio = imgWidth / fichierWidth;
+					imgHeight = Math.floor(fichierHeight * ratio);
+				} else {
+					ratio = imgHeight / fichierHeight;
+					imgWidth = Math.floor(fichierWidth * ratio);
+				}
+
+				doc.addImage(
+					fichierBase64,
+					"JPEG",
+					10,
+					10,
+					imgWidth,
+					imgHeight,
+				);
 			}
 		}
 
