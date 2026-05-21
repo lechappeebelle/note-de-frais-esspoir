@@ -29,6 +29,14 @@
     let { dépense, index, isOpen = false } = $props();
     let dateSélectionnée = $state(toISOLocal(new Date()));
 
+    function getDateDépenseString() {
+        return dépense.dateDépense.toLocaleDateString("fr-FR", {
+            day: "2-digit",
+            month: "2-digit",
+            year: "numeric",
+        });
+    }
+
     function changerLaDate() {
         dépense.dateDépense = new Date(dateSélectionnée);
     }
@@ -37,8 +45,7 @@
 <fieldset>
     <details bind:open={isOpen}>
         <summary title="Masquer le contenu de cette dépense"
-            >{dépense.moisDépense}
-            {dépense.annéeDépense} - {dépense.nomFournisseur}</summary
+            >{getDateDépenseString()} - {dépense.nomFournisseur}</summary
         >
         <label>
             <span>Date</span>
