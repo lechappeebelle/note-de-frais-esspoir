@@ -133,9 +133,11 @@
     label {
         display: flex;
         flex-direction: column;
-
         margin-bottom: 0.7rem;
-        padding-right: 4rem;
+
+        @media (min-width: 1024px) {
+            padding-right: 4rem;
+        }
 
         &.date {
             flex-direction: row;

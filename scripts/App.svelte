@@ -204,7 +204,7 @@
 			<option>novembre</option>
 			<option>décembre</option>
 		</select>
-		<input bind:value={année} type="number" min="2020" step="1" />
+		<input bind:value={année} type="number" min="2020" step="1" size="5" />
 	</label>
 	<h2>Dépenses ({dépenses.length})</h2>
 	{#each dépenses as dépense, index}
@@ -246,6 +246,7 @@
 	form {
 		display: flex;
 		flex-direction: column;
+		width: 100%;
 
 		input,
 		select {
@@ -258,7 +259,6 @@
 		label {
 			display: flex;
 			flex-direction: column;
-
 			margin-bottom: 0.7rem;
 
 			&.date {
