@@ -7,8 +7,8 @@
 	 * @prop {string} nomFournisseur - le nom du fournisseur
 	 * @prop {string} natureDépense - la nature de la dépense
 	 * @prop {string} motifDépense - le motif de la dépense
-	 * @prop {string} montantHT - le montant HT
-	 * @prop {string} montantTTC - le montant TTC
+	 * @prop {number} montantHT - le montant HT
+	 * @prop {number} montantTTC - le montant TTC
 	 * @prop {string} commentaires - des commentaires à propos de la dépense
 	 * @prop {FileList} justificatif - le justificatif de la dépense (plusieurs possibles ?)
 	 */
@@ -105,8 +105,8 @@
 					doc.splitTextToSize(nomFournisseur, 70) || " ",
 				Nature: doc.splitTextToSize(natureDépense, 100) || " ",
 				Motif: doc.splitTextToSize(motifDépense, 100) || " ",
-				"Montant\nHT ": montantHT,
-				"Montant\nTTC ": montantTTC,
+				"Montant\nHT ": montantHT.toFixed(2),
+				"Montant\nTTC ": montantTTC.toFixed(2),
 				"Commentaires ": doc.splitTextToSize(commentaires, 100) || " ",
 			});
 		}

@@ -4,8 +4,8 @@
      * @prop {string} nomFournisseur - le nom du fournisseur
      * @prop {string} natureDépense - la nature de la dépense
      * @prop {string} motifDépense - le motif de la dépense
-     * @prop {string} montantHT - le montant HT
-     * @prop {string} montantTTC - le montant TTC
+     * @prop {number} montantHT - le montant HT
+     * @prop {number} montantTTC - le montant TTC
      * @prop {string} commentaires - des commentaires à propos de la dépense
      * @prop {FileList} justificatif - le justificatif de la dépense (plusieurs possibles ?)
      */
@@ -87,7 +87,9 @@
             <span>Montant HT de la dépense</span>
             <input
                 bind:value={dépense.montantHT}
-                type="text"
+                type="number"
+                min="0.00"
+                step="0.01"
                 autocomplete="on"
                 name="dépense{index + 1}MontantHT"
             />
@@ -96,7 +98,9 @@
             <span>Montant TTC de la dépense</span>
             <input
                 bind:value={dépense.montantTTC}
-                type="text"
+                type="number"
+                min="0.00"
+                step="0.01"
                 autocomplete="on"
                 name="dépense{index + 1}MontantTTC"
             />
