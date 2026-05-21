@@ -107,7 +107,7 @@
                 bind:value={dépense.commentaires}
                 type="text"
                 name="dépense{index + 1}commentaires"
-            />
+            ></textarea>
         </label>
         <label>
             <span>Justificatif</span>
@@ -124,7 +124,7 @@
 <style lang="scss">
     input,
     select {
-        border: 1px solid #341515;
+        border: 1px solid #372323;
         border-radius: 1px;
         padding: 0.2rem;
         margin: 0 0.2rem;
@@ -156,10 +156,15 @@
 
     fieldset {
         padding: 1rem;
-        border: 1px solid #341515;
+        border: 1px solid #372323;
         border-radius: 1px;
         margin: 0.5rem 0;
 
+        @media (prefers-color-scheme: dark) {
+            & {
+                border: 1px solid rgb(255, 249, 215);
+            }
+        }
         details {
             &[open] > summary::after {
                 transform: rotate(-135deg);

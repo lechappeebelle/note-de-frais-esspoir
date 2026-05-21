@@ -222,15 +222,25 @@
 <style lang="scss">
 	:global(main) {
 		display: flex;
-
 		text-align: left;
 		padding: 2em;
 		margin: 0 auto;
-		color: #341515;
+		color: #372323;
+
+		@media (prefers-color-scheme: dark) {
+			& {
+				background-color: #372323;
+				color: rgb(239, 231, 190);
+			}
+		}
 	}
 
 	:global(section) {
 		margin: 0 auto;
+	}
+
+	h1 {
+		margin-bottom: 2rem;
 	}
 
 	form {
@@ -239,7 +249,7 @@
 
 		input,
 		select {
-			border: 1px solid #341515;
+			border: 1px solid #372323;
 			border-radius: 1px;
 			padding: 0.2rem;
 			margin: 0 0.2rem;
@@ -272,15 +282,17 @@
 			font-size: 1.2rem;
 			padding: 0.7rem;
 			margin: 0.5rem 0;
-			color: #341515;
-			border: 1px solid #341515;
+			color: #372323;
+			border: 1px solid #372323;
 			border-radius: 1px;
 			background-color: rgb(255, 249, 215);
 
 			&[type="submit"] {
 				background-color: rgb(255, 215, 0);
-				color: #341515;
+				color: #372323;
 				font-weight: bold;
+				font-size: 1.5rem;
+				padding: 1.5rem;
 			}
 		}
 	}
