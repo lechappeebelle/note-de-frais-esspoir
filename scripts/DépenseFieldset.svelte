@@ -130,6 +130,11 @@
         margin: 0 0.2rem;
     }
 
+    input[type="file"] {
+        max-width: 400px;
+        word-break: break-all;
+    }
+
     label {
         display: flex;
         flex-direction: column;
@@ -168,6 +173,8 @@
             }
         }
         details {
+            max-width: 500px;
+
             &[open] > summary::after {
                 transform: rotate(-135deg);
             }
