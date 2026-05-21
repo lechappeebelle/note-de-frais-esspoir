@@ -126,17 +126,12 @@
 </fieldset>
 
 <style lang="scss">
-    input,
-    select {
+    input {
         border: 1px solid #372323;
         border-radius: 1px;
         padding: 0.2rem;
         margin: 0 0.2rem;
-    }
-
-    input[type="file"] {
-        max-width: 400px;
-        word-break: break-all;
+        width: 100%;
     }
 
     label {
@@ -146,14 +141,6 @@
 
         @media (min-width: 1024px) {
             padding-right: 4rem;
-        }
-
-        &.date {
-            flex-direction: row;
-
-            span {
-                flex-grow: 1;
-            }
         }
 
         span {
