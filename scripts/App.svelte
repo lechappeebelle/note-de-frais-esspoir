@@ -3,9 +3,7 @@
 	import DépenseFieldset from "./DépenseFieldset.svelte";
 
 	/** @typedef Dépense
-	 * @prop {string} jourDépense - le jour de la dépense
-	 * @prop {string} moisDépense - le mois de la dépense
-	 * @prop {string} annéeDépense - l'année de la dépense
+	 * @prop {Date} dateDépense - la date de la dépense
 	 * @prop {string} nomFournisseur - le nom du fournisseur
 	 * @prop {string} natureDépense - la nature de la dépense
 	 * @prop {string} motifDépense - le motif de la dépense
@@ -36,9 +34,7 @@
 	année = lannéeDeMaintenant;
 
 	dépenses.push({
-		jourDépense: "",
-		moisDépense: leMoisDeMaintenant,
-		annéeDépense: lannéeDeMaintenant,
+		dateDépense: new Date(),
 		nomFournisseur: "",
 		natureDépense: "",
 		motifDépense: "",
@@ -84,8 +80,7 @@
 		let dépensesData = [];
 		for (const dépense of dépenses) {
 			const {
-				moisDépense,
-				annéeDépense,
+				dateDépense,
 				nomFournisseur,
 				natureDépense,
 				motifDépense,
@@ -95,7 +90,11 @@
 			} = dépense;
 
 			dépensesData.push({
-				"Date      ": `${moisDépense} ${annéeDépense}`,
+				"Date      ": dateDépense.toLocaleDateString("fr-FR", {
+					day: "2-digit",
+					month: "2-digit",
+					year: "numeric",
+				}),
 				"Nom du fournisseur":
 					doc.splitTextToSize(nomFournisseur, 25) || " ",
 				Nature: doc.splitTextToSize(natureDépense, 40) || " ",
@@ -155,9 +154,7 @@
 		e.preventDefault();
 
 		dépenses.push({
-			jourDépense: " ",
-			moisDépense: leMoisDeMaintenant,
-			annéeDépense: lannéeDeMaintenant,
+			dateDépense: new Date(),
 			nomFournisseur: " ",
 			natureDépense: " ",
 			motifDépense: " ",

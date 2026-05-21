@@ -1,34 +1,52 @@
 <script>
+    /** @typedef Dépense
+     * @prop {Date} dateDépense - la date de la dépense
+     * @prop {string} nomFournisseur - le nom du fournisseur
+     * @prop {string} natureDépense - la nature de la dépense
+     * @prop {string} motifDépense - le motif de la dépense
+     * @prop {string} montantHT - le montant HT
+     * @prop {string} montantTTC - le montant TTC
+     * @prop {string} commentaires - des commentaires à propos de la dépense
+     * @prop {FileList} justificatif - le justificatif de la dépense (plusieurs possibles ?)
+     */
+
+    /**
+     *
+     * @param {Date} d
+     * @return {string} - une date au format `yyyy-mm-dd`
+     */
+    function toISOLocal(d) {
+        const yyyy = d.toLocaleDateString("fr-FR", { year: "numeric" });
+        const mm = d.toLocaleDateString("fr-FR", { month: "2-digit" });
+        const dd = d.toLocaleDateString("fr-FR", { day: "2-digit" });
+
+        return `${yyyy}-${mm}-${dd}`;
+    }
+
+    /**
+     * @type {{dépense: Dépense}, index: number, isOpen: boolean}
+     */
     let { dépense, index, isOpen = false } = $props();
+    let dateSélectionnée = $state(toISOLocal(new Date()));
+
+    function changerLaDate() {
+        dépense.dateDépense = new Date(dateSélectionnée);
+    }
 </script>
 
 <fieldset>
     <details bind:open={isOpen}>
-        <summary
+        <summary title="Masquer le contenu de cette dépense"
             >{dépense.moisDépense}
             {dépense.annéeDépense} - {dépense.nomFournisseur}</summary
         >
-        <label class="date">
+        <label>
             <span>Date</span>
-            <select bind:value={dépense.moisDépense}>
-                <option>janvier</option>
-                <option>février</option>
-                <option>mars</option>
-                <option>avril</option>
-                <option>mai</option>
-                <option>juin</option>
-                <option>juillet</option>
-                <option>août</option>
-                <option>septembre</option>
-                <option>octobre</option>
-                <option>novembre</option>
-                <option>décembre</option>
-            </select>
             <input
-                bind:value={dépense.annéeDépense}
-                type="number"
-                min="2020"
-                step="1"
+                id={dateSélectionnée}
+                type="date"
+                bind:value={dateSélectionnée}
+                onchange={changerLaDate}
             />
         </label>
         <label>
