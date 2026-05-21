@@ -126,7 +126,8 @@
 </fieldset>
 
 <style lang="scss">
-    input {
+    input,
+    textarea {
         border: 1px solid #372323;
         border-radius: 1px;
         padding: 0.2rem;
