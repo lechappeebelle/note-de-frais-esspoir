@@ -227,14 +227,13 @@
 		display: flex;
 
 		text-align: left;
-		padding: 1em;
-		max-width: 240px;
+		padding: 2em;
 		margin: 0 auto;
 		color: #341515;
+	}
 
-		@media (min-width: 640px) {
-			max-width: 80rem;
-		}
+	:global(section) {
+		margin: 0 auto;
 	}
 
 	form {
