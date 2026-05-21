@@ -1,6 +1,7 @@
 <script>
 	import { jsPDF } from "jspdf";
 	import DépenseFieldset from "./DépenseFieldset.svelte";
+	import { setContext } from "svelte";
 
 	/** @typedef Dépense
 	 * @prop {Date} dateDépense - la date de la dépense
@@ -38,8 +39,8 @@
 		nomFournisseur: "",
 		natureDépense: "",
 		motifDépense: "",
-		montantHT: "00.00",
-		montantTTC: "00.00",
+		montantHT: 0,
+		montantTTC: 0,
 		commentaires: "",
 		justificatifs: [],
 	});
@@ -217,6 +218,19 @@
 			justificatifs: [],
 		});
 	}
+
+	setContext("dupliquerUneDépense", (d) => {
+		dépenses.push({
+			dateDépense: d.dateDépense,
+			nomFournisseur: d.nomFournisseur,
+			natureDépense: d.natureDépense,
+			motifDépense: d.motifDépense,
+			montantHT: d.montantHT,
+			montantTTC: d.montantTTC,
+			commentaires: d.commentaires,
+			justificatifs: [],
+		});
+	});
 </script>
 
 <h1>L'Échappée Belle - Notes de frais</h1>
