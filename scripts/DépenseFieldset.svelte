@@ -31,6 +31,10 @@
     let { dépense, index, isOpen = false } = $props();
     let dateSélectionnée = $state(toISOLocal(new Date()));
 
+    const openedText = "Masquer le contenu de cette dépense";
+    const closedText = "Afficher le contenu de cette dépense";
+    let summaryTitle = $derived(isOpen ? openedText : closedText);
+
     function getDateDépenseString() {
         return dépense.dateDépense.toLocaleDateString("fr-FR", {
             day: "2-digit",
@@ -62,7 +66,7 @@
 
 <fieldset>
     <details bind:open={isOpen}>
-        <summary title="Masquer le contenu de cette dépense">
+        <summary title={summaryTitle}>
             <h3>
                 {getDateDépenseString()} - {dépense.nomFournisseur}
             </h3>
