@@ -207,19 +207,22 @@
 	async function ajouterDépense(e) {
 		e.preventDefault();
 
+		derniereActionSupprimer = false;
 		dépenses.push({
 			dateDépense: new Date(),
 			nomFournisseur: " ",
 			natureDépense: " ",
 			motifDépense: " ",
-			montantHT: "00.00",
-			montantTTC: "00.00",
+			montantHT: 0,
+			montantTTC: 0,
 			commentaires: "\n\n",
 			justificatifs: [],
 		});
 	}
 
 	setContext("dupliquerUneDépense", (d) => {
+		derniereActionSupprimer = false;
+
 		dépenses.push({
 			dateDépense: d.dateDépense,
 			nomFournisseur: d.nomFournisseur,
@@ -230,6 +233,13 @@
 			commentaires: d.commentaires,
 			justificatifs: [],
 		});
+	});
+
+	let derniereActionSupprimer = false;
+
+	setContext("supprimerUneDépense", (i) => {
+		derniereActionSupprimer = true;
+		dépenses.splice(i, 1);
 	});
 </script>
 
@@ -278,7 +288,7 @@
 		<DépenseFieldset
 			{dépense}
 			{index}
-			isOpen={index == dépenses.length - 1}
+			isOpen={!derniereActionSupprimer &&  index == dépenses.length - 1}
 		/>
 	{/each}
 	<button onclick={ajouterDépense}>
