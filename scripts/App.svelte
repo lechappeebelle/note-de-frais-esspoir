@@ -323,6 +323,12 @@
 </form>
 
 <style lang="scss">
+	@media (prefers-color-scheme: dark) {
+		:global(body) {
+			background-color: #372323;
+		}
+	}
+
 	:global(main) {
 		display: flex;
 		text-align: left;
