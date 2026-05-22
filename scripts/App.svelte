@@ -21,7 +21,19 @@
 	let année = $state("");
 
 	/** @type {Dépense[]} */
-	let dépenses = $state([]);
+	let dépenses = $state([
+		{
+			dateDépense: new Date(),
+			nomFournisseur: "",
+			natureDépense: "",
+			motifDépense: "",
+			montantHT: 0,
+			montantTTC: 0,
+			commentaires: "",
+			justificatifs: [],
+		},
+	]);
+	let nbDépenses = $derived(dépenses.filter(Boolean).length);
 
 	const maintenant = new Date();
 	const leMoisDeMaintenant = maintenant.toLocaleDateString("fr-FR", {
@@ -34,19 +46,9 @@
 	mois = leMoisDeMaintenant;
 	année = lannéeDeMaintenant;
 
-	dépenses.push({
-		dateDépense: new Date(),
-		nomFournisseur: "",
-		natureDépense: "",
-		motifDépense: "",
-		montantHT: 0,
-		montantTTC: 0,
-		commentaires: "",
-		justificatifs: [],
-	});
-
 	async function créerRécapNDF(e) {
 		e.preventDefault();
+		dépenses = dépenses.filter(Boolean);
 
 		const doc = new jsPDF({
 			orientation: "landscape",
@@ -289,7 +291,7 @@
 		</select>
 		<input bind:value={année} type="number" min="2020" step="1" size="5" />
 	</label>
-	<h2>Dépenses ({dépenses.length})</h2>
+	<h2>Dépenses ({nbDépenses})</h2>
 	{#each dépenses as dépense, index}
 		{#if dépense}
 			<DépenseFieldset
