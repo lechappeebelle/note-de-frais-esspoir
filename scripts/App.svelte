@@ -204,6 +204,8 @@
 		doc.save(`${nomEtPrénom} - NDF ${mois} ${année}.pdf`);
 	}
 
+	let derniereActionSupprimer = $state(false);
+
 	async function ajouterDépense(e) {
 		e.preventDefault();
 
@@ -235,12 +237,16 @@
 		});
 	});
 
-	let derniereActionSupprimer = false;
-
 	setContext("supprimerUneDépense", (i) => {
 		derniereActionSupprimer = true;
-		dépenses.splice(i, 1);
+		delete dépenses[i];
 	});
+
+	function isDépenseOpened(index) {
+		if (derniereActionSupprimer) return false;
+
+		return index == dépenses.length - 1;
+	}
 </script>
 
 <h1>L'Échappée Belle - Notes de frais</h1>
@@ -285,11 +291,13 @@
 	</label>
 	<h2>Dépenses ({dépenses.length})</h2>
 	{#each dépenses as dépense, index}
-		<DépenseFieldset
-			{dépense}
-			{index}
-			isOpen={!derniereActionSupprimer &&  index == dépenses.length - 1}
-		/>
+		{#if dépense}
+			<DépenseFieldset
+				{dépense}
+				{index}
+				isOpen={isDépenseOpened(index)}
+			/>
+		{/if}
 	{/each}
 	<button onclick={ajouterDépense}>
 		<svg
