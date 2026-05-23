@@ -1,18 +1,9 @@
 <script>
+	/** @import {Dépense} from "./types" */
+
 	import { jsPDF } from "jspdf";
 	import DépenseFieldset from "./DépenseFieldset.svelte";
 	import { setContext } from "svelte";
-
-	/** @typedef Dépense
-	 * @prop {Date} dateDépense - la date de la dépense
-	 * @prop {string} nomFournisseur - le nom du fournisseur
-	 * @prop {string} natureDépense - la nature de la dépense
-	 * @prop {string} motifDépense - le motif de la dépense
-	 * @prop {number} montantHT - le montant HT
-	 * @prop {number} montantTTC - le montant TTC
-	 * @prop {string} commentaires - des commentaires à propos de la dépense
-	 * @prop {FileList} justificatif - le justificatif de la dépense (plusieurs possibles ?)
-	 */
 
 	let nomEtPrénom = $state("");
 	let responsableOpérationnel = $state(""); // à faire un jour
