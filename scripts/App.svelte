@@ -5,10 +5,9 @@
 	import { jsPDF } from "jspdf";
 	import DépenseFieldset from "./DépenseFieldset.svelte";
 	import { setContext } from "svelte";
-    import { SvelteSet } from "svelte/reactivity";
 
 	let nomEtPrénom = $state("");
-	let responsableOpérationnel = $state(""); // à faire un jour
+	//let responsableOpérationnel = $state(""); // à faire un jour
 	let fonctionLibellé = $state("");
 	let mois = $state("");
 	let année = $state("");
