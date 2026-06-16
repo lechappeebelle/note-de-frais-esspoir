@@ -5,6 +5,7 @@
 	import { jsPDF } from "jspdf";
 	import DépenseFieldset from "./DépenseFieldset.svelte";
 	import { setContext } from "svelte";
+    import { SvelteSet } from "svelte/reactivity";
 
 	let nomEtPrénom = $state("");
 	let responsableOpérationnel = $state(""); // à faire un jour
@@ -17,8 +18,8 @@
 		currency: 'EUR'
 	})
 
-	/** @type {(Dépense | undefined)[]} */
-	let dépenses = $state([
+	/** @type {Set<Dépense>} */
+	let dépenses = $state(new SvelteSet([
 		{
 			dateDépense: new Date(),
 			nomFournisseur: "",
@@ -29,8 +30,9 @@
 			commentaires: "",
 			justificatif: undefined,
 		},
-	]);
-	let nbDépenses = $derived(dépenses.filter(Boolean).length);
+	]))
+
+	let nbDépenses = $derived(dépenses.size);
 
 	let totalTTC = $derived.by(() => {
 		let total = 0
@@ -70,7 +72,6 @@
      */
 	async function créerRécapNDF(e) {
 		e.preventDefault();
-		dépenses = dépenses.filter(Boolean);
 
 		const doc = new jsPDF({
 			orientation: "landscape",
@@ -111,32 +112,30 @@
 		// Deuxième tableau avec les dépenses
 		let dépensesData = [];
 		for (const dépense of dépenses) {
-			if(dépense){
-				const {
-					dateDépense,
-					nomFournisseur,
-					natureDépense,
-					motifDépense,
-					montantTVA,
-					montantTTC,
-					commentaires,
-				} = dépense;
+			const {
+				dateDépense,
+				nomFournisseur,
+				natureDépense,
+				motifDépense,
+				montantTVA,
+				montantTTC,
+				commentaires,
+			} = dépense;
 
-				dépensesData.push({
-					"Date": dateDépense.toLocaleDateString("fr-FR", {
-						day: "2-digit",
-						month: "2-digit",
-						year: "numeric",
-					}),
-					"Nom du fournisseur":
-						doc.splitTextToSize(nomFournisseur, 70) || " ",
-					Nature: doc.splitTextToSize(natureDépense, 100) || " ",
-					Motif: doc.splitTextToSize(motifDépense, 100) || " ",
-					"Montant\nTVA ": montantTVA.toFixed(2),
-					"Montant\nTTC ": montantTTC.toFixed(2),
-					"Commentaires ": doc.splitTextToSize(commentaires, 100) || " ",
-				});
-			}
+			dépensesData.push({
+				"Date": dateDépense.toLocaleDateString("fr-FR", {
+					day: "2-digit",
+					month: "2-digit",
+					year: "numeric",
+				}),
+				"Nom du fournisseur":
+					doc.splitTextToSize(nomFournisseur, 70) || " ",
+				Nature: doc.splitTextToSize(natureDépense, 100) || " ",
+				Motif: doc.splitTextToSize(motifDépense, 100) || " ",
+				"Montant\nTVA ": montantTVA.toFixed(2),
+				"Montant\nTTC ": montantTTC.toFixed(2),
+				"Commentaires ": doc.splitTextToSize(commentaires, 100) || " ",
+			});
 		}
 
 		// hack pour ajouter la ligne de totaux à la fin du tableau
@@ -170,7 +169,7 @@
 		});
 
 		for (const dépense of dépenses) {
-			if (dépense && dépense.justificatif) {
+			if (dépense.justificatif) {
 				doc.addPage("a4", "landscape");
 
 				const fichier = dépense.justificatif[0];
@@ -251,11 +250,10 @@
 	/**
      * @param {{ preventDefault: () => void; }} e
      */
-	async function ajouterDépense(e) {
-		e.preventDefault();
-
+	async function ajouterDépense(e) {		
 		derniereActionSupprimer = false;
-		dépenses.push({
+		
+		dépenses.add({
 			dateDépense: new Date(),
 			nomFournisseur: " ",
 			natureDépense: " ",
@@ -268,9 +266,10 @@
 	}
 
 	setContext("dupliquerUneDépense", (/** @type {Dépense} */ d) => {
+		console.log('dupliquerUneDépense')
 		derniereActionSupprimer = false;
 
-		dépenses.push({
+		dépenses.add({
 			dateDépense: d.dateDépense,
 			nomFournisseur: d.nomFournisseur,
 			natureDépense: d.natureDépense,
@@ -282,9 +281,9 @@
 		});
 	});
 
-	setContext("supprimerUneDépense", (/** @type {number} */ i) => {
+	setContext("supprimerUneDépense", (/** @type {Dépense} */ d) => {
 		derniereActionSupprimer = true;
-		delete dépenses[i];
+		dépenses.delete(d)
 	});
 
 	/**
@@ -293,7 +292,7 @@
 	function isDépenseOpened(index) {
 		if (derniereActionSupprimer) return false;
 
-		return index == dépenses.length - 1;
+		return index == dépenses.size - 1;
 	}
 
 
@@ -343,17 +342,15 @@
 	</label>
 	<h2>Dépenses ({nbDépenses})</h2>
 
-	{#each dépenses as dépense, index}
-		{#if dépense}
-			<DépenseFieldset
-				{dépense}
-				{index}
-				isOpen={isDépenseOpened(index)}
-			/>
-		{/if}
+	{#each dépenses as dépense, index (dépense)}
+		<DépenseFieldset
+			{dépense}
+			{index}
+			isOpen={isDépenseOpened(index)}
+		/>
 	{/each}
 
-	<button onclick={ajouterDépense}>
+	<button type="button" onclick={ajouterDépense}>
 		<svg
 			width="20x"
 			height="20px"

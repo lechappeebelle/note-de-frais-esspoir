@@ -23,6 +23,7 @@
 
     const openedText = "Masquer le contenu de cette dépense";
     const closedText = "Afficher le contenu de cette dépense";
+
     let summaryTitle = $derived(isOpen ? openedText : closedText);
 
     function getDateDépenseString() {
@@ -39,24 +40,15 @@
 
     const dupliquerUneDépense = getContext("dupliquerUneDépense");
 
-    /**
-     * @param {Event} e
-     */
-    function dupliquer(e) {
-        e.preventDefault();
-
+    function dupliquer() {
+        console.log('dupliquer')
         dupliquerUneDépense(dépense);
     }
 
     const supprimerUneDépense = getContext("supprimerUneDépense");
 
-    /**
-     * @param {Event} e
-     */
-    function supprimer(e) {
-        e.preventDefault();
-
-        supprimerUneDépense(index);
+    function supprimer() {
+        supprimerUneDépense(dépense);
     }
 </script>
 
@@ -67,7 +59,7 @@
                 {getDateDépenseString()} - {dépense.nomFournisseur}
             </h3>
             <div class="actions">
-                <button onclick={dupliquer}>
+                <button type="button" onclick={dupliquer}>
                     <svg
                         fill="#372323"
                         width="24px"
@@ -86,7 +78,7 @@
                         /></svg
                     >
                 </button>
-                <button onclick={supprimer}>
+                <button type="button" onclick={supprimer}>
                     <svg
                         width="24px"
                         height="24px"
@@ -204,7 +196,7 @@
         </label>
 
         <div class="actions">
-            <button onclick={dupliquer}>
+            <button type="button" onclick={dupliquer}>
                 <svg
                     fill="#372323"
                     width="24px"
@@ -222,7 +214,7 @@
                 >
                 Dupliquer
             </button>
-            <button onclick={supprimer}>
+            <button type="button" onclick={supprimer}>
                 <svg
                     width="24px"
                     height="24px"
