@@ -17,12 +17,13 @@
         return `${yyyy}-${mm}-${dd}`;
     }
 
-    /** @type {{dépense: Dépense, index: number, isOpen: boolean}} */
-    let { dépense, index, isOpen = false } = $props();
+    /** @type {{dépense: Dépense, isOpen: boolean}} */
+    let { dépense = $bindable(), isOpen = false } = $props();
     let dateSélectionnée = $state(toISOLocal(new Date()));
 
     const openedText = "Masquer le contenu de cette dépense";
     const closedText = "Afficher le contenu de cette dépense";
+
     let summaryTitle = $derived(isOpen ? openedText : closedText);
 
     function getDateDépenseString() {
@@ -39,24 +40,14 @@
 
     const dupliquerUneDépense = getContext("dupliquerUneDépense");
 
-    /**
-     * @param {Event} e
-     */
-    function dupliquer(e) {
-        e.preventDefault();
-
+    function dupliquer() {
         dupliquerUneDépense(dépense);
     }
 
     const supprimerUneDépense = getContext("supprimerUneDépense");
 
-    /**
-     * @param {Event} e
-     */
-    function supprimer(e) {
-        e.preventDefault();
-
-        supprimerUneDépense(index);
+    function supprimer() {
+        supprimerUneDépense(dépense);
     }
 </script>
 
@@ -67,7 +58,7 @@
                 {getDateDépenseString()} - {dépense.nomFournisseur}
             </h3>
             <div class="actions">
-                <button onclick={dupliquer}>
+                <button type="button" onclick={dupliquer}>
                     <svg
                         fill="#372323"
                         width="24px"
@@ -86,7 +77,7 @@
                         /></svg
                     >
                 </button>
-                <button onclick={supprimer}>
+                <button type="button" onclick={supprimer}>
                     <svg
                         width="24px"
                         height="24px"
@@ -143,7 +134,7 @@
                 bind:value={dépense.nomFournisseur}
                 type="text"
                 autocomplete="on"
-                name="dépense{index + 1}NomFournisseur"
+                name="NomFournisseur"
             />
         </label>
         <label>
@@ -152,7 +143,7 @@
                 bind:value={dépense.natureDépense}
                 type="text"
                 autocomplete="on"
-                name="dépense{index + 1}NatureDépense"
+                name="NatureDépense"
             />
         </label>
         <label>
@@ -161,7 +152,7 @@
                 bind:value={dépense.motifDépense}
                 type="text"
                 autocomplete="on"
-                name="dépense{index + 1}MotifDépense"
+                name="MotifDépense"
             />
         </label>
         <label class="montant">
@@ -171,8 +162,7 @@
                 type="number"
                 min="0.00"
                 step="0.01"
-                autocomplete="on"
-                name="dépense{index + 1}MontantTVA"
+                name="MontantTVA"
             />
         </label>
         <label class="montant">
@@ -182,15 +172,14 @@
                 type="number"
                 min="0.00"
                 step="0.01"
-                autocomplete="on"
-                name="dépense{index + 1}MontantTTC"
+                name="MontantTTC"
             />
         </label>
         <label>
             <span>Commentaires</span>
             <textarea
                 bind:value={dépense.commentaires}
-                name="dépense{index + 1}commentaires"
+                name="commentaires"
             ></textarea>
         </label>
         <label>
@@ -199,12 +188,12 @@
                 bind:files={dépense.justificatif}
                 accept=".jpg, .jpeg, .png, .pdf, .gif"
                 type="file"
-                name="dépense{index + 1}Justificatif"
+                name="Justificatif"
             />
         </label>
 
         <div class="actions">
-            <button onclick={dupliquer}>
+            <button type="button" onclick={dupliquer}>
                 <svg
                     fill="#372323"
                     width="24px"
@@ -222,7 +211,7 @@
                 >
                 Dupliquer
             </button>
-            <button onclick={supprimer}>
+            <button type="button" onclick={supprimer}>
                 <svg
                     width="24px"
                     height="24px"
