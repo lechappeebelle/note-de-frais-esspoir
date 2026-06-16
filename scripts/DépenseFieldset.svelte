@@ -18,7 +18,7 @@
     }
 
     /** @type {{dépense: Dépense, isOpen: boolean}} */
-    let { dépense, isOpen = false } = $props();
+    let { dépense = $bindable(), isOpen = false } = $props();
     let dateSélectionnée = $state(toISOLocal(new Date()));
 
     const openedText = "Masquer le contenu de cette dépense";

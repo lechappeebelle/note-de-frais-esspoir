@@ -18,8 +18,8 @@
 		currency: 'EUR'
 	})
 
-	/** @type {Set<Dépense>} */
-	let dépenses = $state(new SvelteSet([
+	/** @type {Dépense[]} */
+	let dépenses = $state([
 		{
 			dateDépense: new Date(),
 			nomFournisseur: "",
@@ -30,15 +30,13 @@
 			commentaires: "",
 			justificatif: undefined,
 		},
-	]))
-
-	let nbDépenses = $derived(dépenses.size);
+	])
 
 	let totalTTC = $derived.by(() => {
 		let total = 0
 
 		for(const d of dépenses){
-			total += d?.montantTTC || 0
+			total += d.montantTTC
 		}
 
 		return total
@@ -48,7 +46,7 @@
 		let total = 0
 
 		for(const d of dépenses){
-			total += d?.montantTVA || 0
+			total += d.montantTVA
 		}
 
 		return total
@@ -253,7 +251,7 @@
 	async function ajouterDépense(e) {		
 		derniereActionSupprimer = false;
 		
-		dépenses.add({
+		dépenses.push({
 			dateDépense: new Date(),
 			nomFournisseur: " ",
 			natureDépense: " ",
@@ -269,7 +267,7 @@
 		console.log('dupliquerUneDépense')
 		derniereActionSupprimer = false;
 
-		dépenses.add({
+		dépenses.push({
 			dateDépense: d.dateDépense,
 			nomFournisseur: d.nomFournisseur,
 			natureDépense: d.natureDépense,
@@ -282,8 +280,9 @@
 	});
 
 	setContext("supprimerUneDépense", (/** @type {Dépense} */ d) => {
+		dépenses.splice(dépenses.findIndex(el => el === d), 1)
+
 		derniereActionSupprimer = true;
-		dépenses.delete(d)
 	});
 
 
@@ -329,13 +328,13 @@
 		</select>
 		<input bind:value={année} type="number" min="2020" step="1" size="5" />
 	</label>
-	<h2>Dépenses ({nbDépenses})</h2>
+	<h2>Dépenses ({dépenses.length})</h2>
 
 	{#each dépenses as dépense, index (dépense)}
 		<DépenseFieldset
-			{dépense}
+			bind:dépense={dépenses[index]}
 			// ouvrir le dernier élément, sauf si la dernière action était de supprimer
-			isOpen={derniereActionSupprimer ? false : (index === dépenses.size - 1)}
+			isOpen={derniereActionSupprimer ? false : (index === dépenses.length - 1)}
 		/>
 	{/each}
 
