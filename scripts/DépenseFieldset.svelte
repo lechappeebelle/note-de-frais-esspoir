@@ -1,4 +1,5 @@
 <script>
+	//@ts-check
     /** @import {Dépense} from "./types" */
 
     import { getContext } from "svelte";
@@ -16,9 +17,7 @@
         return `${yyyy}-${mm}-${dd}`;
     }
 
-    /**
-     * @type {{dépense: Dépense}, index: number, isOpen: boolean}
-     */
+    /** @type {{dépense: Dépense, index: number, isOpen: boolean}} */
     let { dépense, index, isOpen = false } = $props();
     let dateSélectionnée = $state(toISOLocal(new Date()));
 
@@ -40,6 +39,9 @@
 
     const dupliquerUneDépense = getContext("dupliquerUneDépense");
 
+    /**
+     * @param {Event} e
+     */
     function dupliquer(e) {
         e.preventDefault();
 
@@ -48,6 +50,9 @@
 
     const supprimerUneDépense = getContext("supprimerUneDépense");
 
+    /**
+     * @param {Event} e
+     */
     function supprimer(e) {
         e.preventDefault();
 
@@ -160,14 +165,14 @@
             />
         </label>
         <label class="montant">
-            <span>Montant HT de la dépense</span>
+            <span>Montant TVA de la dépense</span>
             <input
-                bind:value={dépense.montantHT}
+                bind:value={dépense.montantTVA}
                 type="number"
                 min="0.00"
                 step="0.01"
                 autocomplete="on"
-                name="dépense{index + 1}MontantHT"
+                name="dépense{index + 1}MontantTVA"
             />
         </label>
         <label class="montant">
@@ -185,7 +190,6 @@
             <span>Commentaires</span>
             <textarea
                 bind:value={dépense.commentaires}
-                type="text"
                 name="dépense{index + 1}commentaires"
             ></textarea>
         </label>

@@ -16,5 +16,12 @@ C'est beaucoup de manipulations de fichiers
 On peut faire plus simple. C'est l'objet de cet outil
 
 
+## Installer, lancer en local
 
+Nous recommandons d'utiliser [pnpm](https://pnpm.io/) et sinon, npm fonctionnera très bien
+
+```sh
+pnpm install
+pnpm run dev
+```
 
