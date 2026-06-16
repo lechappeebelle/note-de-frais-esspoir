@@ -48,7 +48,8 @@
 		const doc = new jsPDF({
 			orientation: "landscape",
 			unit: "px",
-			hotfixes: "px_scaling",
+			// apparement, nous n'avons pas besoin de cette option
+//			hotfixes: ["px_scaling"],
 		});
 		doc.setFontSize(18);
 		doc.text("L'Échappée Belle - Notes de frais", 20, 30);
@@ -129,9 +130,12 @@
 
 		for (const dépense of dépenses) {
 			if (dépense.justificatif) {
-				doc.addPage({ orientation: "landscape" });
+				doc.addPage("a4", "landscape");
 
-				const fichier = dépense.justificatif.item(0);
+				const fichier = dépense.justificatif[0];
+
+				if(!fichier)
+					throw new TypeError('Fichier justificatif ne devrait pas être null')
 
 				const fichierBase64P = new Promise((resolve, reject) => {
 					const reader = new FileReader();
