@@ -12,7 +12,12 @@
 	let mois = $state("");
 	let année = $state("");
 
-	/** @type {Dépense[]} */
+	let formatMontantEuros = new Intl.NumberFormat('fr-FR', {
+		style: 'currency',
+		currency: 'EUR'
+	})
+
+	/** @type {(Dépense | undefined)[]} */
 	let dépenses = $state([
 		{
 			dateDépense: new Date(),
@@ -84,30 +89,32 @@
 		// Deuxième tableau avec les dépenses
 		let dépensesData = [];
 		for (const dépense of dépenses) {
-			const {
-				dateDépense,
-				nomFournisseur,
-				natureDépense,
-				motifDépense,
-				montantTVA,
-				montantTTC,
-				commentaires,
-			} = dépense;
+			if(dépense){
+				const {
+					dateDépense,
+					nomFournisseur,
+					natureDépense,
+					motifDépense,
+					montantTVA,
+					montantTTC,
+					commentaires,
+				} = dépense;
 
-			dépensesData.push({
-				"Date      ": dateDépense.toLocaleDateString("fr-FR", {
-					day: "2-digit",
-					month: "2-digit",
-					year: "numeric",
-				}),
-				"Nom du fournisseur":
-					doc.splitTextToSize(nomFournisseur, 70) || " ",
-				Nature: doc.splitTextToSize(natureDépense, 100) || " ",
-				Motif: doc.splitTextToSize(motifDépense, 100) || " ",
-				"Montant\nTVA ": montantTVA.toFixed(2),
-				"Montant\nTTC ": montantTTC.toFixed(2),
-				"Commentaires ": doc.splitTextToSize(commentaires, 100) || " ",
-			});
+				dépensesData.push({
+					"Date      ": dateDépense.toLocaleDateString("fr-FR", {
+						day: "2-digit",
+						month: "2-digit",
+						year: "numeric",
+					}),
+					"Nom du fournisseur":
+						doc.splitTextToSize(nomFournisseur, 70) || " ",
+					Nature: doc.splitTextToSize(natureDépense, 100) || " ",
+					Motif: doc.splitTextToSize(motifDépense, 100) || " ",
+					"Montant\nTVA ": montantTVA.toFixed(2),
+					"Montant\nTTC ": montantTTC.toFixed(2),
+					"Commentaires ": doc.splitTextToSize(commentaires, 100) || " ",
+				});
+			}
 		}
 
 		/* On doit mettre exactement les mêmes libellés de headers que les clés
@@ -129,7 +136,7 @@
 		});
 
 		for (const dépense of dépenses) {
-			if (dépense.justificatif) {
+			if (dépense && dépense.justificatif) {
 				doc.addPage("a4", "landscape");
 
 				const fichier = dépense.justificatif[0];
@@ -254,6 +261,28 @@
 
 		return index == dépenses.length - 1;
 	}
+
+	let totalTTC = $derived.by(() => {
+		let total = 0
+
+		for(const d of dépenses){
+			total += d?.montantTTC || 0
+		}
+
+		return total
+	})
+
+	let totalTVA = $derived.by(() => {
+		let total = 0
+
+		for(const d of dépenses){
+			total += d?.montantTVA || 0
+		}
+
+		return total
+	})
+
+
 </script>
 
 <h1>L'Échappée Belle - Notes de frais</h1>
@@ -297,6 +326,7 @@
 		<input bind:value={année} type="number" min="2020" step="1" size="5" />
 	</label>
 	<h2>Dépenses ({nbDépenses})</h2>
+
 	{#each dépenses as dépense, index}
 		{#if dépense}
 			<DépenseFieldset
@@ -306,6 +336,7 @@
 			/>
 		{/if}
 	{/each}
+
 	<button onclick={ajouterDépense}>
 		<svg
 			width="20x"
@@ -323,6 +354,13 @@
 		</svg>
 		Ajouter une dépense
 	</button>
+
+	<hr>
+		<strong>Total TTC&nbsp;:</strong> {formatMontantEuros.format(totalTTC)}
+		<br>
+		<strong>Total TVA&nbsp;:</strong> {formatMontantEuros.format(totalTVA)}
+	<hr>
+
 
 	<button type="submit">Créer le récap de notes de frais 🚀</button>
 </form>
