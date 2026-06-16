@@ -17,8 +17,8 @@
         return `${yyyy}-${mm}-${dd}`;
     }
 
-    /** @type {{dépense: Dépense, index: number, isOpen: boolean}} */
-    let { dépense, index, isOpen = false } = $props();
+    /** @type {{dépense: Dépense, isOpen: boolean}} */
+    let { dépense, isOpen = false } = $props();
     let dateSélectionnée = $state(toISOLocal(new Date()));
 
     const openedText = "Masquer le contenu de cette dépense";

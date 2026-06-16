@@ -286,17 +286,6 @@
 		dépenses.delete(d)
 	});
 
-	/**
-     * @param {number} index
-     */
-	function isDépenseOpened(index) {
-		if (derniereActionSupprimer) return false;
-
-		return index == dépenses.size - 1;
-	}
-
-
-
 
 </script>
 
@@ -345,8 +334,8 @@
 	{#each dépenses as dépense, index (dépense)}
 		<DépenseFieldset
 			{dépense}
-			{index}
-			isOpen={isDépenseOpened(index)}
+			// ouvrir le dernier élément, sauf si la dernière action était de supprimer
+			isOpen={derniereActionSupprimer ? false : (index === dépenses.size - 1)}
 		/>
 	{/each}
 
