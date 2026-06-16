@@ -135,7 +135,7 @@
                 bind:value={dépense.nomFournisseur}
                 type="text"
                 autocomplete="on"
-                name="dépense{index + 1}NomFournisseur"
+                name="NomFournisseur"
             />
         </label>
         <label>
@@ -144,7 +144,7 @@
                 bind:value={dépense.natureDépense}
                 type="text"
                 autocomplete="on"
-                name="dépense{index + 1}NatureDépense"
+                name="NatureDépense"
             />
         </label>
         <label>
@@ -153,7 +153,7 @@
                 bind:value={dépense.motifDépense}
                 type="text"
                 autocomplete="on"
-                name="dépense{index + 1}MotifDépense"
+                name="MotifDépense"
             />
         </label>
         <label class="montant">
@@ -163,8 +163,7 @@
                 type="number"
                 min="0.00"
                 step="0.01"
-                autocomplete="on"
-                name="dépense{index + 1}MontantTVA"
+                name="MontantTVA"
             />
         </label>
         <label class="montant">
@@ -174,15 +173,14 @@
                 type="number"
                 min="0.00"
                 step="0.01"
-                autocomplete="on"
-                name="dépense{index + 1}MontantTTC"
+                name="MontantTTC"
             />
         </label>
         <label>
             <span>Commentaires</span>
             <textarea
                 bind:value={dépense.commentaires}
-                name="dépense{index + 1}commentaires"
+                name="commentaires"
             ></textarea>
         </label>
         <label>
@@ -191,7 +189,7 @@
                 bind:files={dépense.justificatif}
                 accept=".jpg, .jpeg, .png, .pdf, .gif"
                 type="file"
-                name="dépense{index + 1}Justificatif"
+                name="Justificatif"
             />
         </label>
 
