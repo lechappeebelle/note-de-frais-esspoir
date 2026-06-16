@@ -32,6 +32,28 @@
 	]);
 	let nbDépenses = $derived(dépenses.filter(Boolean).length);
 
+	let totalTTC = $derived.by(() => {
+		let total = 0
+
+		for(const d of dépenses){
+			total += d?.montantTTC || 0
+		}
+
+		return total
+	})
+
+	let totalTVA = $derived.by(() => {
+		let total = 0
+
+		for(const d of dépenses){
+			total += d?.montantTVA || 0
+		}
+
+		return total
+	})
+
+
+
 	const maintenant = new Date();
 	const leMoisDeMaintenant = maintenant.toLocaleDateString("fr-FR", {
 		month: "long",
@@ -101,7 +123,7 @@
 				} = dépense;
 
 				dépensesData.push({
-					"Date      ": dateDépense.toLocaleDateString("fr-FR", {
+					"Date": dateDépense.toLocaleDateString("fr-FR", {
 						day: "2-digit",
 						month: "2-digit",
 						year: "numeric",
@@ -117,11 +139,22 @@
 			}
 		}
 
+		// hack pour ajouter la ligne de totaux à la fin du tableau
+		dépensesData.push({
+			"Date": "",
+			"Nom du fournisseur": "",
+			Nature: "",
+			Motif: "Totaux",
+			"Montant\nTVA ": `${totalTVA.toFixed(2)}€`,
+			"Montant\nTTC ": `${totalTTC.toFixed(2)}€`,
+			"Commentaires ": ""
+		})
+
 		/* On doit mettre exactement les mêmes libellés de headers que les clés
 		 * des objets des données, sinon jspdf jette une erreur.
 		 */
 		const headers = [
-			"Date      ",
+			"Date",
 			"Nom du fournisseur",
 			"Nature",
 			"Motif",
@@ -133,6 +166,7 @@
 		doc.table(20, 150, dépensesData, headers, {
 			fontSize: 13,
 			printHeaders: true,
+			headerBackgroundColor: '#DDD'
 		});
 
 		for (const dépense of dépenses) {
@@ -262,25 +296,7 @@
 		return index == dépenses.length - 1;
 	}
 
-	let totalTTC = $derived.by(() => {
-		let total = 0
 
-		for(const d of dépenses){
-			total += d?.montantTTC || 0
-		}
-
-		return total
-	})
-
-	let totalTVA = $derived.by(() => {
-		let total = 0
-
-		for(const d of dépenses){
-			total += d?.montantTVA || 0
-		}
-
-		return total
-	})
 
 
 </script>
