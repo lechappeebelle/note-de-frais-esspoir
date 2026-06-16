@@ -41,7 +41,6 @@
     const dupliquerUneDépense = getContext("dupliquerUneDépense");
 
     function dupliquer() {
-        console.log('dupliquer')
         dupliquerUneDépense(dépense);
     }
 
