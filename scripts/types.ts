@@ -4,8 +4,8 @@ export interface Dépense {
   nomFournisseur: string,
   natureDépense: string,
   motifDépense: string,
-  montantHT: number,
+  montantTVA: number,
   montantTTC: number,
   commentaires: string,
-  justificatif: FileList,
+  justificatif?: FileList,
 }

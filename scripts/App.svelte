@@ -1,4 +1,5 @@
 <script>
+	//@ts-check
 	/** @import {Dépense} from "./types" */
 
 	import { jsPDF } from "jspdf";
@@ -18,10 +19,10 @@
 			nomFournisseur: "",
 			natureDépense: "",
 			motifDépense: "",
-			montantHT: 0,
+			montantTVA: 0,
 			montantTTC: 0,
 			commentaires: "",
-			justificatifs: [],
+			justificatif: undefined,
 		},
 	]);
 	let nbDépenses = $derived(dépenses.filter(Boolean).length);
@@ -37,6 +38,9 @@
 	mois = leMoisDeMaintenant;
 	année = lannéeDeMaintenant;
 
+	/**
+     * @param {Event} e
+     */
 	async function créerRécapNDF(e) {
 		e.preventDefault();
 		dépenses = dépenses.filter(Boolean);
@@ -84,7 +88,7 @@
 				nomFournisseur,
 				natureDépense,
 				motifDépense,
-				montantHT,
+				montantTVA,
 				montantTTC,
 				commentaires,
 			} = dépense;
@@ -99,7 +103,7 @@
 					doc.splitTextToSize(nomFournisseur, 70) || " ",
 				Nature: doc.splitTextToSize(natureDépense, 100) || " ",
 				Motif: doc.splitTextToSize(motifDépense, 100) || " ",
-				"Montant\nHT ": montantHT.toFixed(2),
+				"Montant\nTVA ": montantTVA.toFixed(2),
 				"Montant\nTTC ": montantTTC.toFixed(2),
 				"Commentaires ": doc.splitTextToSize(commentaires, 100) || " ",
 			});
@@ -113,7 +117,7 @@
 			"Nom du fournisseur",
 			"Nature",
 			"Motif",
-			"Montant\nHT ",
+			"Montant\nTVA ",
 			"Montant\nTTC ",
 			"Commentaires ",
 		];
@@ -199,6 +203,9 @@
 
 	let derniereActionSupprimer = $state(false);
 
+	/**
+     * @param {{ preventDefault: () => void; }} e
+     */
 	async function ajouterDépense(e) {
 		e.preventDefault();
 
@@ -208,14 +215,14 @@
 			nomFournisseur: " ",
 			natureDépense: " ",
 			motifDépense: " ",
-			montantHT: 0,
+			montantTVA: 0,
 			montantTTC: 0,
 			commentaires: "\n\n",
-			justificatifs: [],
+			justificatif: undefined,
 		});
 	}
 
-	setContext("dupliquerUneDépense", (d) => {
+	setContext("dupliquerUneDépense", (/** @type {Dépense} */ d) => {
 		derniereActionSupprimer = false;
 
 		dépenses.push({
@@ -223,18 +230,21 @@
 			nomFournisseur: d.nomFournisseur,
 			natureDépense: d.natureDépense,
 			motifDépense: d.motifDépense,
-			montantHT: d.montantHT,
+			montantTVA: d.montantTVA,
 			montantTTC: d.montantTTC,
 			commentaires: d.commentaires,
-			justificatifs: [],
+			justificatif: undefined,
 		});
 	});
 
-	setContext("supprimerUneDépense", (i) => {
+	setContext("supprimerUneDépense", (/** @type {number} */ i) => {
 		derniereActionSupprimer = true;
 		delete dépenses[i];
 	});
 
+	/**
+     * @param {number} index
+     */
 	function isDépenseOpened(index) {
 		if (derniereActionSupprimer) return false;
 
