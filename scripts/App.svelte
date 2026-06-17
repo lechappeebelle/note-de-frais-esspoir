@@ -4,7 +4,6 @@
 
 	import { jsPDF } from "jspdf";
 	import DépenseFieldset from "./DépenseFieldset.svelte";
-	import { setContext } from "svelte";
 
 	let nomEtPrénom = $state("");
 	//let responsableOpérationnel = $state(""); // à faire un jour
@@ -262,8 +261,11 @@
 		});
 	}
 
-	setContext("dupliquerUneDépense", (/** @type {Dépense} */ d) => {
-		console.log('dupliquerUneDépense')
+	/**
+	 * 
+	 * @param {Dépense} d
+	 */
+	function dupliquerDépense(d){
 		derniereActionSupprimer = false;
 
 		dépenses.push({
@@ -276,13 +278,17 @@
 			commentaires: d.commentaires,
 			justificatif: undefined,
 		});
-	});
+	}
 
-	setContext("supprimerUneDépense", (/** @type {Dépense} */ d) => {
-		dépenses.splice(dépenses.findIndex(el => el === d), 1)
+	/**
+	 * 
+	 * @param {number} index
+	 */
+	function supprimerDépense(index){
+		dépenses.splice(index, 1)
 
 		derniereActionSupprimer = true;
-	});
+	}
 
 
 </script>
@@ -334,6 +340,8 @@
 			bind:dépense={dépenses[index]}
 			// ouvrir le dernier élément, sauf si la dernière action était de supprimer
 			isOpen={derniereActionSupprimer ? false : (index === dépenses.length - 1)}
+			dupliquerCetteDépense={() => dupliquerDépense(dépense)}
+			supprimerCetteDépense={() => supprimerDépense(index)}
 		/>
 	{/each}
 
