@@ -49,6 +49,12 @@
     function supprimer() {
         supprimerUneDépense(dépense);
     }
+
+    // ne pas accepter les pdf pour le moment
+    // mais à terme, accept = "image/*, .pdf"
+    const accept = "image/*"
+
+
 </script>
 
 <fieldset>
@@ -184,9 +190,13 @@
         </label>
         <label>
             <span>Justificatif</span>
+            <span class="hint">
+                Uniquement des images. Pour des justificatif en pdf, les fusionner a posteriori avec 
+                <a target="_blank" href="https://bento.framapdf.org/fr/merge-pdf.html">un outil dédié</a>
+            </span>
             <input
                 bind:files={dépense.justificatif}
-                accept=".jpg, .jpeg, .png, .pdf, .gif"
+                accept={accept}
                 type="file"
                 name="Justificatif"
             />
@@ -258,7 +268,6 @@
 <style lang="scss">
     input,
     textarea {
-        color: #372323;
         border: 1px solid #372323;
         border-radius: 1px;
         padding: 0.2rem;
@@ -278,6 +287,30 @@
         span {
             font-weight: bold;
         }
+
+        .hint{
+            font-size: 0.8em;
+            line-height: 1.2em;
+
+            color: #444;  
+
+            a{
+                text-decoration: underline;
+
+                color: #333;
+            }
+
+            @media (prefers-color-scheme: dark) {
+                & {
+                    color: #BBB;
+                    a{
+                        color: #CCC;
+                    }
+                }
+            }
+        }
+
+        
 
         &:last-of-type {
             margin-bottom: 2rem;
@@ -303,13 +336,14 @@
 
     fieldset {
         padding: 1rem;
-        border: 1px solid #372323;
         border-radius: 1px;
         margin: 0.5rem 0;
 
+        border: 1px solid #372323;
+
         @media (prefers-color-scheme: dark) {
             & {
-                border: 1px solid rgb(255, 249, 215);
+                border-color: rgb(255, 249, 215);
             }
         }
         details {
