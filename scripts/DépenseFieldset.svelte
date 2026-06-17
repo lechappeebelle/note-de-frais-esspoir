@@ -2,8 +2,6 @@
 	//@ts-check
     /** @import {Dépense} from "./types" */
 
-    import { getContext } from "svelte";
-
     /**
      *
      * @param {Date} d
@@ -17,8 +15,8 @@
         return `${yyyy}-${mm}-${dd}`;
     }
 
-    /** @type {{dépense: Dépense, isOpen: boolean}} */
-    let { dépense = $bindable(), isOpen = false } = $props();
+    /** @type {{dépense: Dépense, isOpen: boolean, dupliquerCetteDépense: () => void, supprimerCetteDépense: () => void}} */
+    let { dépense = $bindable(), isOpen = false, dupliquerCetteDépense, supprimerCetteDépense } = $props();
     let dateSélectionnée = $state(toISOLocal(new Date()));
 
     const openedText = "Masquer le contenu de cette dépense";
@@ -38,22 +36,9 @@
         dépense.dateDépense = new Date(dateSélectionnée);
     }
 
-    const dupliquerUneDépense = getContext("dupliquerUneDépense");
-
-    function dupliquer() {
-        dupliquerUneDépense(dépense);
-    }
-
-    const supprimerUneDépense = getContext("supprimerUneDépense");
-
-    function supprimer() {
-        supprimerUneDépense(dépense);
-    }
-
     // ne pas accepter les pdf pour le moment
     // mais à terme, accept = "image/*, .pdf"
     const accept = "image/*"
-
 
 </script>
 
@@ -64,7 +49,7 @@
                 {getDateDépenseString()} - {dépense.nomFournisseur}
             </h3>
             <div class="actions">
-                <button type="button" onclick={dupliquer}>
+                <button type="button" onclick={dupliquerCetteDépense}>
                     <svg
                         fill="#372323"
                         width="24px"
@@ -83,7 +68,7 @@
                         /></svg
                     >
                 </button>
-                <button type="button" onclick={supprimer}>
+                <button type="button" onclick={supprimerCetteDépense}>
                     <svg
                         width="24px"
                         height="24px"
@@ -203,7 +188,7 @@
         </label>
 
         <div class="actions">
-            <button type="button" onclick={dupliquer}>
+            <button type="button" onclick={dupliquerCetteDépense}>
                 <svg
                     fill="#372323"
                     width="24px"
@@ -221,7 +206,7 @@
                 >
                 Dupliquer
             </button>
-            <button type="button" onclick={supprimer}>
+            <button type="button" onclick={supprimerCetteDépense}>
                 <svg
                     width="24px"
                     height="24px"
