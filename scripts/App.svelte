@@ -317,21 +317,23 @@
 	<label class="date">
 		<span>Période de la NDF</span>
 		<!-- Faire un composant de date -->
-		<select bind:value={mois}>
-			<option>janvier</option>
-			<option>février</option>
-			<option>mars</option>
-			<option>avril</option>
-			<option>mai</option>
-			<option>juin</option>
-			<option>juillet</option>
-			<option>août</option>
-			<option>septembre</option>
-			<option>octobre</option>
-			<option>novembre</option>
-			<option>décembre</option>
-		</select>
-		<input bind:value={année} type="number" min="2020" step="1" size="5" />
+		<div>
+			<select bind:value={mois}>
+				<option>janvier</option>
+				<option>février</option>
+				<option>mars</option>
+				<option>avril</option>
+				<option>mai</option>
+				<option>juin</option>
+				<option>juillet</option>
+				<option>août</option>
+				<option>septembre</option>
+				<option>octobre</option>
+				<option>novembre</option>
+				<option>décembre</option>
+			</select>
+			<input bind:value={année} type="number" min="2020" step="1" size="5" />
+		</div>
 	</label>
 	<h2>Dépenses ({dépenses.length})</h2>
 
@@ -423,6 +425,8 @@
 
 			&.date {
 				flex-direction: row;
+				flex-wrap:wrap;
+				gap: .5rem;
 
 				span {
 					flex-grow: 1;
