@@ -323,7 +323,12 @@
     }
 
     fieldset {
-        padding: 1rem;
+        padding: 0.3rem;
+
+        @media (min-width: 30em) {
+			padding: 1rem;
+		}
+
         border-radius: 1px;
         margin: 0.5rem 0;
 

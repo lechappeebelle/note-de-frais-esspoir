@@ -385,7 +385,7 @@
 	:global(main) {
 		display: flex;
 		text-align: left;
-		padding: 2em;
+		padding: 0.5em;
 		margin: 0 auto;
 		color: #372323;
 
@@ -395,6 +395,11 @@
 				color: rgb(239, 231, 190);
 			}
 		}
+
+		@media (min-width: 30em) {
+			padding: 2em;
+		}
+
 	}
 
 	:global(section) {
